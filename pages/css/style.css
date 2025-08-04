@@ -1,0 +1,42 @@
+/* ===== MAIN STYLES - Core reset and legacy styles only ===== */
+/* This file now only contains essential reset and any remaining styles */
+/* Most styles have been moved to modular CSS files */
+
+/* ===== CSS RESET & BASE STYLES ===== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+input,
+textarea,
+select {
+    font-family: inherit;
+}
+
+ul,
+ol {
+    list-style: none;
+}

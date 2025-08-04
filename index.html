@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P2LAN Transfer - Simple LAN File Sharing</title>
+    
+    <!-- Meta Tags for SEO -->
+    <meta name="description" content="P2LAN Transfer - Fast, secure, and cross-platform file transfer application for direct peer-to-peer communication over local networks. No server needed!">
+    <meta name="keywords" content="file transfer, P2P, LAN, Flutter, Windows, Android, local network">
+    
+    <!-- Open Graph meta tags -->
+    <meta property="og:title" content="P2LAN Transfer">
+    <meta property="og:description" content="Make LAN transfers easy, no server needed">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="./assets/app_icon.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="./assets/app_icon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/app_icon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/app_icon.png">
+    <link rel="apple-touch-icon" href="./assets/app_icon.png">
+    
+    <!-- CSS -->
+        <!-- CSS Files - Ordered by dependency -->
+    <link rel="stylesheet" href="./pages/css/variables.css">
+    <link rel="stylesheet" href="./pages/css/style.css">
+    <link rel="stylesheet" href="./pages/css/components.css">
+    <link rel="stylesheet" href="./pages/css/layout.css">
+    <link rel="stylesheet" href="./pages/css/sections.css">
+    <link rel="stylesheet" href="./pages/css/lightbox.css">
+    <link rel="stylesheet" href="./pages/css/responsive.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="./assets/app_icon.png" alt="P2LAN Transfer Logo">
+                <span>P2LAN Transfer</span>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <a href="#hero" class="nav-link" data-text="home">Home</a>
+                <a href="#features" class="nav-link" data-text="features">Features</a>
+                <a href="#screenshots" class="nav-link" data-text="screenshots">Screenshots</a>
+                <a href="#download" class="nav-link" data-text="download">Download</a>
+                <a href="#docs" class="nav-link" data-text="gettingStarted">Getting Started</a>
+                
+                <!-- Language Switcher -->
+                <div class="nav-language">
+                    <button class="lang-btn active" data-lang="en">EN</button>
+                    <button class="lang-btn" data-lang="vi">VI</button>
+                </div>
+                
+                <!-- Theme Toggle -->
+                <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+            <div class="nav-toggle" id="nav-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 data-text="heroTitle">Simple LAN File Sharing</h1>
+                    <p class="hero-description" data-text="heroSubtitle">
+                        Transfer files securely between devices on your local network. No internet required, no server needed.
+                    </p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" data-download="windows">
+                            <i class="fas fa-download"></i>
+                            <span data-text="downloadNow">Download Now</span>
+                        </button>
+                        <button class="btn btn-secondary" data-link="github">
+                            <i class="fab fa-github"></i>
+                            <span data-text="viewOnGitHub">View on GitHub</span>
+                        </button>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <i class="fas fa-bolt"></i>
+                            <span data-text="fastTransfer">Fast Transfer</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-shield-alt"></i>
+                            <span data-text="secureConnection">Secure Connection</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-mobile-alt"></i>
+                            <span data-text="crossPlatform">Cross Platform</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="./assets/app_icon.png" alt="P2LAN Transfer App Icon">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 data-text="featuresTitle">Why Choose P2LAN Transfer?</h2>
+                <p data-text="featuresSubtitle">Built with modern technology for seamless file sharing experience</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 data-text="feature1Title">Fast & Reliable</h3>
+                    <p data-text="feature1Desc">Transfer files at maximum LAN speed with reliable peer-to-peer connection.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 data-text="feature2Title">Secure Encryption</h3>
+                    <p data-text="feature2Desc">All transfers are encrypted with AES-256 to ensure your data stays private.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 data-text="feature3Title">Cross Platform</h3>
+                    <p data-text="feature3Desc">Works seamlessly on Windows, Android, and more platforms coming soon.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3 data-text="feature4Title">No Server Required</h3>
+                    <p data-text="feature4Desc">Direct device-to-device communication without any central server.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3 data-text="feature5Title">Easy to Use</h3>
+                    <p data-text="feature5Desc">Simple, intuitive interface that anyone can use without technical knowledge.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fab fa-osi"></i>
+                    </div>
+                    <h3 data-text="feature6Title">Open Source</h3>
+                    <p data-text="feature6Desc">Completely open source with MIT license. Contribute and make it better.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Screenshots Section -->
+    <section id="screenshots" class="screenshots">
+        <div class="container">
+            <div class="section-header">
+                <h2 data-text="screenshotsTitle">See It In Action</h2>
+                <p data-text="screenshotsSubtitle">Take a look at the clean and intuitive interface</p>
+            </div>
+            
+            <div class="screenshots-gallery">
+                <div class="screenshot-item">
+                    <img src="./assets/preview/image1text.png" alt="Main Interface" loading="lazy">
+                </div>
+                <div class="screenshot-item">
+                    <img src="./assets/preview/image2text.png" alt="File Transfer" loading="lazy">
+                </div>
+                <div class="screenshot-item">
+                    <img src="./assets/preview/image3text.png" alt="Settings Panel" loading="lazy">
+                </div>
+                <div class="screenshot-item">
+                    <img src="./assets/preview/image4text.png" alt="Settings Panel" loading="lazy">
+                </div>
+                <div class="screenshot-item">
+                    <img src="./assets/preview/image5text.png" alt="Settings Panel" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section id="download" class="download">
+        <div class="container">
+            <div class="section-header">
+                <h2 data-text="downloadTitle">Download P2LAN Transfer</h2>
+                <p data-text="downloadSubtitle">Get started with fast and secure file sharing today</p>
+            </div>
+            
+            <div class="download-grid">
+                <div class="download-card">
+                    <div class="download-icon">
+                        <i class="fab fa-windows"></i>
+                    </div>
+                    <h3 data-text="windowsTitle">For Windows</h3>
+                    <p data-text="windowsDesc">Windows 10/11 compatible version with all features included.</p>
+                    <button class="btn btn-primary" data-download="windows">
+                        <i class="fas fa-download"></i>
+                        <span data-text="downloadWindows">Download for Windows</span>
+                    </button>
+                </div>
+                
+                <div class="download-card">
+                    <div class="download-icon">
+                        <i class="fab fa-android"></i>
+                    </div>
+                    <h3 data-text="androidTitle">For Android</h3>
+                    <p data-text="androidDesc">Android 5.0+ compatible with modern Material Design interface.</p>
+                    <button class="btn btn-primary" data-download="android">
+                        <i class="fas fa-download"></i>
+                        <span data-text="downloadAndroid">Download for Android</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="btn btn-outline" data-link="releases">
+                    <i class="fab fa-github"></i>
+                    <span data-text="viewAllReleases">View All Releases</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Documentation Section -->
+    <section id="docs" class="docs">
+        <div class="container">
+            <div class="section-header">
+                <h2 data-text="docsTitle">Getting Started</h2>
+                <p data-text="docsSubtitle">Learn how to use P2LAN Transfer in just a few simple steps</p>
+            </div>
+            
+            <div class="docs-grid">
+                <div class="doc-card">
+                    <div class="step-number">1</div>
+                    <h3 data-text="step1Title">Install the App</h3>
+                    <p data-text="step1Desc">Download and install P2LAN Transfer on your devices.</p>
+                </div>
+                
+                <div class="doc-card">
+                    <div class="step-number">2</div>
+                    <h3 data-text="step2Title">Configure Settings</h3>
+                    <p data-text="step2Desc">Access settings to customize preferences and enable multi-language support.</p>
+                </div>
+                
+                <div class="doc-card">
+                    <div class="step-number">3</div>
+                    <h3 data-text="step3Title">Connect to Network</h3>
+                    <p data-text="step3Desc">Make sure both devices are connected to the same local network.</p>
+                </div>
+                
+                <div class="doc-card">
+                    <div class="step-number">4</div>
+                    <h3 data-text="step4Title">Pair Devices</h3>
+                    <p data-text="step4Desc">Use the built-in discovery feature to find and pair with other devices.</p>
+                </div>
+                
+                <div class="doc-card">
+                    <div class="step-number">5</div>
+                    <h3 data-text="step5Title">Start Sharing</h3>
+                    <p data-text="step5Desc">Select files and start transferring with just a few clicks.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="./assets/app_icon.png" alt="P2LAN Transfer Logo">
+                        <span>P2LAN Transfer</span>
+                    </div>
+                    <p data-text="footerTagline">Simple, fast, and secure file sharing for everyone.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 data-text="product">Product</h4>
+                    <ul>
+                        <li><a href="#features" data-text="features">Features</a></li>
+                        <li><a href="#download" data-text="download">Download</a></li>
+                        <li><a href="#docs" data-text="gettingStarted">Getting Started</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 data-text="developer">Developer</h4>
+                    <ul>
+                        <li><a href="#" data-link="github" data-text="github">GitHub</a></li>
+                        <li><a href="#" data-link="issues" data-text="reportIssues">Report Issues</a></li>
+                        <li><a href="#" data-link="docs" data-text="documentation">Documentation</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 data-text="connect">Connect</h4>
+                    <div class="social-links">
+                        <a href="#" data-link="github" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="mailto:trong.ajtt.dev@gmail.com" aria-label="Email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 P2LAN Transfer. Open source under GPL-3.0 License.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="back-to-top" aria-label="Back to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <div class="lightbox-content">
+            <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+            <img id="lightbox-img" src="" alt="Screenshot">
+            <div class="lightbox-nav">
+                <button class="lightbox-prev" onclick="previousImage()">&larr;</button>
+                <button class="lightbox-next" onclick="nextImage()">&rarr;</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="./pages/js/config.js"></script>
+    <script src="./pages/js/script.js"></script>
+
+    <!-- Global Functions for Lightbox -->
+    <script>
+        function closeLightbox() {
+            P2LANApp.closeLightbox();
+        }
+        
+        function nextImage() {
+            P2LANApp.nextImage();
+        }
+        
+        function previousImage() {
+            P2LANApp.previousImage();
+        }
+    </script>
+</body>
+</html>
