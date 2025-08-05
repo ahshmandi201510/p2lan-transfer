@@ -26,7 +26,10 @@
   "donorBenefits": "Supporter Benefits",
   "donorBenefit1": "Be listed in the acknowledgments and share your comments (if you want).",
   "donorBenefit2": "Prioritized feedback consideration.",
-  "donorBenefit3": "Early access to new versions (dev repository access), however updates are not guaranteed to be frequent.",
+  "donorBenefit3": "Access to beta (debug) versions, however updates are not guaranteed to be frequent.",
+  "donorBenefit4": "Access to dev repo (Github Sponsors only).",
+  "checkForNewVersion": "Check for New Version",
+  "checkForNewVersionDesc": "Check if there is a new version of the app and download the latest version if available",
   "platform": "Platform",
   "routine": "Routine",
   "settings": "Settings",
@@ -1141,6 +1144,79 @@
 
   "notificationRequestPermission": "Request Notification Permission",
   "notificationRequestPermissionDesc": "The app needs to be granted notification permission in order to notify you. If you have pressed the 'Grant Permission' button but the permission dialog still does not appear, please manually grant notification permission in the app's permission settings.",
-  "grantPermission": "Grant Permission"
+  "grantPermission": "Grant Permission",
+
+  "checkingForUpdates": "Checking for updates...",
+  "noNewUpdates": "No new updates",
+  "updateCheckError": "Error checking updates: {errorMessage}",
+  "@updateCheckError": {
+    "placeholders": {
+      "errorMessage": {
+        "type": "String"
+      }
+    }
+  },
+  "usingLatestVersion": "You are using the latest version",
+  "newVersionAvailable": "New version available",
+  "latest": "Latest",
+  "currentVersion": "Current: {version}",
+  "@currentVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "publishDate": "Publish date: {publishDate}",
+  "@publishDate": {
+    "placeholders": {
+      "publishDate": {
+        "type": "String"
+      }
+    }
+  },
+  "releaseNotes": "Release notes",
+  "noReleaseNotes": "No release notes",
+  "alreadyLatestVersion": "Already the latest version",
+  "download": "Download",
+  "selectVersionToDownload": "Select version to download",
+  "filteredForPlatform": "Filtered for {getPlatformName}",
+  "@filteredForPlatform": {
+    "placeholders": {
+      "getPlatformName": {
+        "type": "String"
+      }
+    }
+  },
+  "sizeInMB": "Size: {sizeInMB}",
+  "@sizeInMB": {
+    "placeholders": {
+      "sizeInMB": {
+        "type": "String"
+      }
+    }
+  },
+  "uploadDate": "Upload date: {updatedAt}",
+  "@uploadDate": {
+    "placeholders": {
+      "updatedAt": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmDownload": "Confirm download",
+  "confirmDownloadMessage": "Are you sure you want to download this version?\n\nFile name: {name}\nSize: {sizeInMB}",
+  "@confirmDownloadMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "sizeInMB": {
+        "type": "String"
+      }
+    }
+  },
+  "currentPlatform": "Current platform",
+  "eerror": "Error"
 
 }

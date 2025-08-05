@@ -257,8 +257,26 @@ abstract class AppLocalizations {
   /// No description provided for @donorBenefit3.
   ///
   /// In en, this message translates to:
-  /// **'Early access to new versions (dev repository access), however updates are not guaranteed to be frequent.'**
+  /// **'Access to beta (debug) versions, however updates are not guaranteed to be frequent.'**
   String get donorBenefit3;
+
+  /// No description provided for @donorBenefit4.
+  ///
+  /// In en, this message translates to:
+  /// **'Access to dev repo (Github Sponsors only).'**
+  String get donorBenefit4;
+
+  /// No description provided for @checkForNewVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Check for New Version'**
+  String get checkForNewVersion;
+
+  /// No description provided for @checkForNewVersionDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Check if there is a new version of the app and download the latest version if available'**
+  String get checkForNewVersionDesc;
 
   /// No description provided for @platform.
   ///
@@ -3883,6 +3901,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Grant Permission'**
   String get grantPermission;
+
+  /// No description provided for @checkingForUpdates.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking for updates...'**
+  String get checkingForUpdates;
+
+  /// No description provided for @noNewUpdates.
+  ///
+  /// In en, this message translates to:
+  /// **'No new updates'**
+  String get noNewUpdates;
+
+  /// No description provided for @updateCheckError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error checking updates: {errorMessage}'**
+  String updateCheckError(String errorMessage);
+
+  /// No description provided for @usingLatestVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'You are using the latest version'**
+  String get usingLatestVersion;
+
+  /// No description provided for @newVersionAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'New version available'**
+  String get newVersionAvailable;
+
+  /// No description provided for @latest.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest'**
+  String get latest;
+
+  /// No description provided for @currentVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Current: {version}'**
+  String currentVersion(String version);
+
+  /// No description provided for @publishDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Publish date: {publishDate}'**
+  String publishDate(String publishDate);
+
+  /// No description provided for @releaseNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Release notes'**
+  String get releaseNotes;
+
+  /// No description provided for @noReleaseNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'No release notes'**
+  String get noReleaseNotes;
+
+  /// No description provided for @alreadyLatestVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Already the latest version'**
+  String get alreadyLatestVersion;
+
+  /// No description provided for @download.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get download;
+
+  /// No description provided for @selectVersionToDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Select version to download'**
+  String get selectVersionToDownload;
+
+  /// No description provided for @filteredForPlatform.
+  ///
+  /// In en, this message translates to:
+  /// **'Filtered for {getPlatformName}'**
+  String filteredForPlatform(String getPlatformName);
+
+  /// No description provided for @sizeInMB.
+  ///
+  /// In en, this message translates to:
+  /// **'Size: {sizeInMB}'**
+  String sizeInMB(String sizeInMB);
+
+  /// No description provided for @uploadDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload date: {updatedAt}'**
+  String uploadDate(String updatedAt);
+
+  /// No description provided for @confirmDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm download'**
+  String get confirmDownload;
+
+  /// No description provided for @confirmDownloadMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to download this version?\n\nFile name: {name}\nSize: {sizeInMB}'**
+  String confirmDownloadMessage(String name, String sizeInMB);
+
+  /// No description provided for @currentPlatform.
+  ///
+  /// In en, this message translates to:
+  /// **'Current platform'**
+  String get currentPlatform;
+
+  /// No description provided for @eerror.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get eerror;
 }
 
 class _AppLocalizationsDelegate

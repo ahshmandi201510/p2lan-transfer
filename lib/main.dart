@@ -73,6 +73,10 @@ Future<void> completeServicesInitialization() async {
     await ProfileTabService.instance.initialize();
     logInfo('ProfileTabService initialized');
 
+    // Initialize P2P Service Manager (includes chat service and all P2P services)
+    await P2PServiceManager.init();
+    logInfo('P2PServiceManager initialized');
+
     // Initialize other background services if not already done
     _initializeServicesInBackground();
 
@@ -210,6 +214,10 @@ void _initializeServicesInBackground() {
       // Initialize P2P Notification Service
       await P2PNotificationService.init();
       logDebug('P2PNotificationService initialized');
+
+      // Initialize P2P Service Manager (includes all P2P services)
+      await P2PServiceManager.init();
+      logDebug('P2PServiceManager initialized');
 
       // Clear all pairing requests on app startup
       try {

@@ -22,6 +22,10 @@ class LocalizationUtils {
         final DateFormat formatter =
             DateFormat.yMd(locale).add_jms(); // Date and time
         return formatter.format(dateTime);
+      case DateTimeFormatType.exceptSec:
+        final DateFormat formatter =
+            DateFormat.yMd(locale).add_jm(); // Date and time without seconds
+        return formatter.format(dateTime);
       case DateTimeFormatType.message:
         if (MyDateUtils.isToday(dateTime)) {
           // Return time only if today
@@ -156,4 +160,4 @@ class LocalizationUtils {
   }
 }
 
-enum DateTimeFormatType { full, message }
+enum DateTimeFormatType { full, exceptSec, message }

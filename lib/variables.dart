@@ -10,12 +10,18 @@ const String githubReleaseUrl =
     'https://github.com/TrongAJTT/p2lan-transfer/releases';
 const String githubSponsorUrl = 'https://github.com/sponsors/TrongAJTT';
 const String buyMeACoffeeUrl = 'https://www.buymeacoffee.com/trongajtt';
-const String momoDonateUrl = 'https://me.momo.vn/8vI1TzseFRFQF3UquBU1fz';
+const String momoDonateUrl =
+    'https://me.momo.vn/8vI1TzseFRFQF3UquBU1fz/5xe79k5vr5VAb7r';
 const String termsUrl =
     'https://raw.githubusercontent.com/TrongAJTT/p2lan-transfer-terms/main/TERM_OF_USE_<locale>.md';
 // Replace <locale> with the actual locale code
 const String donnorsAcknowledgmentUrl =
     'https://raw.githubusercontent.com/TrongAJTT/p2lan-transfer-terms/refs/heads/main/DONORS.json';
+
+const String latestReleaseEndpoint =
+    'https://api.github.com/repos/TrongAJTT/p2lan-transfer/releases/latest';
+
+const String userAgent = "P2Lan-Transfer-App";
 
 const double tabletScreenWidthThreshold = 600.0;
 const double desktopScreenWidthThreshold = 1024.0;

@@ -91,7 +91,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get donorBenefit3 =>
-      'Early access to new versions (dev repository access), however updates are not guaranteed to be frequent.';
+      'Access to beta (debug) versions, however updates are not guaranteed to be frequent.';
+
+  @override
+  String get donorBenefit4 => 'Access to dev repo (Github Sponsors only).';
+
+  @override
+  String get checkForNewVersion => 'Check for New Version';
+
+  @override
+  String get checkForNewVersionDesc =>
+      'Check if there is a new version of the app and download the latest version if available';
 
   @override
   String get platform => 'Platform';
@@ -2059,4 +2069,78 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get grantPermission => 'Grant Permission';
+
+  @override
+  String get checkingForUpdates => 'Checking for updates...';
+
+  @override
+  String get noNewUpdates => 'No new updates';
+
+  @override
+  String updateCheckError(String errorMessage) {
+    return 'Error checking updates: $errorMessage';
+  }
+
+  @override
+  String get usingLatestVersion => 'You are using the latest version';
+
+  @override
+  String get newVersionAvailable => 'New version available';
+
+  @override
+  String get latest => 'Latest';
+
+  @override
+  String currentVersion(String version) {
+    return 'Current: $version';
+  }
+
+  @override
+  String publishDate(String publishDate) {
+    return 'Publish date: $publishDate';
+  }
+
+  @override
+  String get releaseNotes => 'Release notes';
+
+  @override
+  String get noReleaseNotes => 'No release notes';
+
+  @override
+  String get alreadyLatestVersion => 'Already the latest version';
+
+  @override
+  String get download => 'Download';
+
+  @override
+  String get selectVersionToDownload => 'Select version to download';
+
+  @override
+  String filteredForPlatform(String getPlatformName) {
+    return 'Filtered for $getPlatformName';
+  }
+
+  @override
+  String sizeInMB(String sizeInMB) {
+    return 'Size: $sizeInMB';
+  }
+
+  @override
+  String uploadDate(String updatedAt) {
+    return 'Upload date: $updatedAt';
+  }
+
+  @override
+  String get confirmDownload => 'Confirm download';
+
+  @override
+  String confirmDownloadMessage(String name, String sizeInMB) {
+    return 'Are you sure you want to download this version?\n\nFile name: $name\nSize: $sizeInMB';
+  }
+
+  @override
+  String get currentPlatform => 'Current platform';
+
+  @override
+  String get eerror => 'Error';
 }

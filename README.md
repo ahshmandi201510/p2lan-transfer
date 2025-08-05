@@ -6,8 +6,8 @@
 
 A simple cross-platform file transfer application that enables direct peer-to-peer communication over local networks. Built with Flutter for Windows and Android platforms.
 
->There is a minor bug with the chat function. If one person starts a conversation unilaterally, the other person's replies won't be received.<br>
->To solve this, one person needs to exit and re-enter the chat to fully initialize the conversation. Alternatively, both users can proactively add each other's profiles to their chat list before sending the first message.
+> [!NOTE]
+> On Android devices, you'll need to restart the app after the first launch to get the local chat function working correctly.
 
 ## 📸 Screenshot
 

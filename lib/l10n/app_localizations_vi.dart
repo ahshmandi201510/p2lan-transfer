@@ -92,7 +92,18 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get donorBenefit3 =>
-      'Truy cập sớm vào các phiên bản mới (truy cập kho lưu trữ phát triển), tuy nhiên các bản cập nhật sẽ không đợc hứa hẹn thường xuyên.';
+      'Truy cập vào các phiên bản beta (gỡ lỗi), tuy nhiên các bản cập nhật sẽ không đợc hứa hẹn thường xuyên.';
+
+  @override
+  String get donorBenefit4 =>
+      'Truy cập vào kho lưu trữ dev (chỉ dành cho người ủng hộ trên GitHub).';
+
+  @override
+  String get checkForNewVersion => 'Kiểm tra phiên bản mới';
+
+  @override
+  String get checkForNewVersionDesc =>
+      'Kiểm tra xem có phiên bản mới của ứng dụng không và tải về bản mới nhất nếu có';
 
   @override
   String get platform => 'Nền tảng';
@@ -2059,4 +2070,78 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get grantPermission => 'Cấp quyền';
+
+  @override
+  String get checkingForUpdates => 'Đang kiểm tra cập nhật...';
+
+  @override
+  String get noNewUpdates => 'Không có cập nhật mới';
+
+  @override
+  String updateCheckError(String errorMessage) {
+    return 'Lỗi khi kiểm tra cập nhật: $errorMessage';
+  }
+
+  @override
+  String get usingLatestVersion => 'Bạn đang sử dụng phiên bản mới nhất';
+
+  @override
+  String get newVersionAvailable => 'Phiên bản mới có sẵn';
+
+  @override
+  String get latest => 'Mới nhất';
+
+  @override
+  String currentVersion(String version) {
+    return 'Hiện tại: $version';
+  }
+
+  @override
+  String publishDate(String publishDate) {
+    return 'Ngày phát hành: $publishDate';
+  }
+
+  @override
+  String get releaseNotes => 'Ghi chú phiên bản';
+
+  @override
+  String get noReleaseNotes => 'Không có ghi chú phiên bản';
+
+  @override
+  String get alreadyLatestVersion => 'Đã là phiên bản mới nhất';
+
+  @override
+  String get download => 'Tải về';
+
+  @override
+  String get selectVersionToDownload => 'Chọn phiên bản để tải';
+
+  @override
+  String filteredForPlatform(String getPlatformName) {
+    return 'Đã lọc cho $getPlatformName';
+  }
+
+  @override
+  String sizeInMB(String sizeInMB) {
+    return 'Kích thước: $sizeInMB';
+  }
+
+  @override
+  String uploadDate(String updatedAt) {
+    return 'Ngày tải lên: $updatedAt';
+  }
+
+  @override
+  String get confirmDownload => 'Xác nhận tải xuống';
+
+  @override
+  String confirmDownloadMessage(String name, String sizeInMB) {
+    return 'Bạn có chắc chắn muốn tải phiên bản này xuống?\n\nTên tệp: $name\nKích thước: $sizeInMB';
+  }
+
+  @override
+  String get currentPlatform => 'Nền tảng hiện tại';
+
+  @override
+  String get eerror => 'Lỗi';
 }

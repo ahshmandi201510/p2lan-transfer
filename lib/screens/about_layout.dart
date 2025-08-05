@@ -3,6 +3,7 @@ import 'package:p2lantransfer/l10n/app_localizations.dart';
 import 'package:p2lantransfer/library_list.dart';
 import 'package:p2lantransfer/screens/terms_of_use_screen.dart';
 import 'package:p2lantransfer/screens/donors_acknowledgment_screen.dart';
+import 'package:p2lantransfer/services/version_check_service.dart';
 import 'package:p2lantransfer/utils/url_utils.dart';
 import 'package:p2lantransfer/utils/variables_utils.dart';
 import 'package:p2lantransfer/widgets/generic/generic_settings_helper.dart';
@@ -140,6 +141,20 @@ class _AboutLayoutState extends State<AboutLayout> {
             trailing: const Icon(Icons.arrow_forward_ios),
             onTap: _showVersionDialog,
           ),
+
+          // Update new version section
+          ListTile(
+            leading: const Icon(
+              Icons.update,
+              color: Colors.purple,
+            ),
+            title: Text(l10n.checkForNewVersion),
+            subtitle: Text(l10n.checkForNewVersionDesc),
+            trailing: const Icon(Icons.arrow_forward_ios),
+            onTap: () {
+              VersionCheckService.showVersionDialog(context);
+            },
+          ),
         ],
       ),
     );
@@ -253,8 +268,8 @@ class _AboutLayoutState extends State<AboutLayout> {
               onTap: () => UriUtils.launchInBrowserWithConfirm(
                   context: context,
                   url: momoDonateUrl,
-                  content: 'Momo không phải là nền tảng ủng hộ chuyên dụng.\n'
-                      'Để nhận được đặc quyền, bạn cần đính kèm github trong tin nhắn hoặc liên hệ mình qua email.'),
+                  content: 'Momo không phải là nền tảng ủng hộ chuyên dụng!\n'
+                      'Vui lòng để lại email để mình có thể liên hệ bạn.'),
             ),
           ],
 
@@ -304,6 +319,15 @@ class _AboutLayoutState extends State<AboutLayout> {
                           Expanded(child: Text(l10n.donorBenefit3)),
                         ],
                       ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          const Icon(Icons.check_circle,
+                              color: Colors.green, size: 18),
+                          const SizedBox(width: 8),
+                          Expanded(child: Text(l10n.donorBenefit4)),
+                        ],
+                      ),
                     ],
                   ),
                 ],
@@ -340,43 +364,46 @@ class _AboutLayoutState extends State<AboutLayout> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Thank you authors card
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.code,
-                  color: Colors.blue,
-                  size: 32,
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        l10n.thanksLibAuthor,
-                        style: theme.textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        l10n.thanksLibAuthorDesc,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.onSurface
-                              .withValues(alpha: 0.7),
-                        ),
-                      ),
-                    ],
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.code,
+                    color: Colors.blue,
+                    size: 32,
                   ),
-                ),
-              ],
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l10n.thanksLibAuthor,
+                          style: theme.textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          l10n.thanksLibAuthorDesc,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.7),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-        const SizedBox(height: 16),
+        // Libraries list
         Expanded(
           child: ListView.separated(
             shrinkWrap: true,

@@ -26,7 +26,10 @@
   "donorBenefits": "Quyền lợi của người ủng hộ",
   "donorBenefit1": "Được ghi danh trong phần cảm ơn và chia sẻ ý kiến của bạn (nếu bạn muốn).",
   "donorBenefit2": "Được ưu tiên xem xét phản hồi.",
-  "donorBenefit3": "Truy cập sớm vào các phiên bản mới (truy cập kho lưu trữ phát triển), tuy nhiên các bản cập nhật sẽ không đợc hứa hẹn thường xuyên.",
+  "donorBenefit3": "Truy cập vào các phiên bản beta (gỡ lỗi), tuy nhiên các bản cập nhật sẽ không đợc hứa hẹn thường xuyên.",
+  "donorBenefit4": "Truy cập vào kho lưu trữ dev (chỉ dành cho người ủng hộ trên GitHub).",
+  "checkForNewVersion": "Kiểm tra phiên bản mới",
+  "checkForNewVersionDesc": "Kiểm tra xem có phiên bản mới của ứng dụng không và tải về bản mới nhất nếu có",
   "platform": "Nền tảng",
   "routine": "Thường nhật",
   "settings": "Cài đặt",
@@ -809,6 +812,78 @@
   
   "notificationRequestPermission": "Yêu cầu quyền thông báo",
   "notificationRequestPermissionDesc": "Ứng dụng cần được cấp quyền thông báo để có thể thông báo cho bạn. Nếu đã nhấn nút 'Cấp quyền' mà vẫn không hộp thoại cấp quyền xảy ra, phiền bạn cấp quyền thông báo một cách thủ công trong phần cài đặt quyền của ứng dụng.",
-  "grantPermission": "Cấp quyền"
-  
+  "grantPermission": "Cấp quyền",
+
+  "checkingForUpdates": "Đang kiểm tra cập nhật...",
+  "noNewUpdates": "Không có cập nhật mới",
+  "updateCheckError": "Lỗi khi kiểm tra cập nhật: {errorMessage}",
+  "@updateCheckError": {
+    "placeholders": {
+      "errorMessage": {
+        "type": "String"
+      }
+    }
+  },
+  "usingLatestVersion": "Bạn đang sử dụng phiên bản mới nhất",
+  "newVersionAvailable": "Phiên bản mới có sẵn",
+  "latest": "Mới nhất",
+  "currentVersion": "Hiện tại: {version}",
+  "@currentVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "publishDate": "Ngày phát hành: {publishDate}",
+  "@publishDate": {
+    "placeholders": {
+      "publishDate": {
+        "type": "String"
+      }
+    }
+  },
+  "releaseNotes": "Ghi chú phiên bản",
+  "noReleaseNotes": "Không có ghi chú phiên bản",
+  "alreadyLatestVersion": "Đã là phiên bản mới nhất",
+  "download": "Tải về",
+  "selectVersionToDownload": "Chọn phiên bản để tải",
+  "filteredForPlatform": "Đã lọc cho {getPlatformName}",
+  "@filteredForPlatform": {
+    "placeholders": {
+      "getPlatformName": {
+        "type": "String"
+      }
+    }
+  },
+  "sizeInMB": "Kích thước: {sizeInMB}",
+  "@sizeInMB": {
+    "placeholders": {
+      "sizeInMB": {
+        "type": "String"
+      }
+    }
+  },
+  "uploadDate": "Ngày tải lên: {updatedAt}",
+  "@uploadDate": {
+    "placeholders": {
+      "updatedAt": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmDownload": "Xác nhận tải xuống",
+  "confirmDownloadMessage": "Bạn có chắc chắn muốn tải phiên bản này xuống?\n\nTên tệp: {name}\nKích thước: {sizeInMB}",
+  "@confirmDownloadMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "sizeInMB": {
+        "type": "String"
+      }
+    }
+  },
+  "currentPlatform": "Nền tảng hiện tại",
+  "eerror": "Lỗi"
 }

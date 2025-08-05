@@ -420,7 +420,7 @@ class _P2PGeneralSettingsState extends State<P2PGeneralSettings> {
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 8),
                   SwitchListTile.adaptive(
                     title: Text(loc.completedTransfers),
                     subtitle: Text(loc.removeProgressOnSuccess),
@@ -435,6 +435,8 @@ class _P2PGeneralSettingsState extends State<P2PGeneralSettings> {
                           'Auto-cleanup completed tasks setting changed to: $value');
                     },
                     secondary: const Icon(Icons.check_circle),
+                    contentPadding: EdgeInsets.zero,
+                    dense: false,
                   ),
                   SwitchListTile.adaptive(
                     title: Text(loc.cancelledTransfers),
@@ -450,6 +452,8 @@ class _P2PGeneralSettingsState extends State<P2PGeneralSettings> {
                           'Auto-cleanup cancelled tasks setting changed to: $value');
                     },
                     secondary: const Icon(Icons.cancel),
+                    contentPadding: EdgeInsets.zero,
+                    dense: false,
                   ),
                   SwitchListTile.adaptive(
                     title: Text(loc.failedTransfers),
@@ -465,8 +469,10 @@ class _P2PGeneralSettingsState extends State<P2PGeneralSettings> {
                           'Auto-cleanup failed tasks setting changed to: $value');
                     },
                     secondary: const Icon(Icons.error),
+                    contentPadding: EdgeInsets.zero,
+                    dense: false,
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 8),
                   Row(
                     children: [
                       const Icon(Icons.timer, size: 20),
