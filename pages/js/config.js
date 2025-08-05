@@ -7,8 +7,13 @@ const AppConfig = {
         
         // Download Links
         downloads: {
-            windows: 'https://github.com/TrongAJTT/p2lan-transfer/releases/latest',
-            android: 'https://github.com/TrongAJTT/p2lan-transfer/releases/latest',
+            windows: 'https://github.com/TrongAJTT/p2lan-transfer/releases/download/v1.0.0/P2Lan-Transfer-v1.0.0-windows-x64-release.7z',
+            android: {
+                'android-arm64-v8a': 'https://github.com/TrongAJTT/p2lan-transfer/releases/download/v1.0.0/P2Lan-Transfer-v1.0.0-android-arm64-v8a-release.apk',
+                'android-armeabi-v7a': 'https://github.com/TrongAJTT/p2lan-transfer/releases/download/v1.0.0/P2Lan-Transfer-v1.0.0-android-armeabi-v7a-release.apk',
+                'android-x86_64': 'https://github.com/TrongAJTT/p2lan-transfer/releases/download/v1.0.0/P2Lan-Transfer-v1.0.0-android-x86_64-release.apk',
+                'android-universal': 'https://github.com/TrongAJTT/p2lan-transfer/releases/download/v1.0.0/P2Lan-Transfer-v1.0.0-android-universal-release.apk'
+            },
             github_releases: 'https://github.com/TrongAJTT/p2lan-transfer/releases'
         },
         
@@ -128,7 +133,7 @@ const translations = {
         feature5Desc: 'Simple, intuitive interface that anyone can use without technical knowledge.',
 
         feature6Title: 'Open Source',
-        feature6Desc: 'Completely open source with MIT license. Contribute and make it better.',
+        feature6Desc: 'Completely open source with GPL-3.0 license.',
         // Screenshots
         screenshotsTitle: 'See It In Action',
         screenshotsSubtitle: 'Take a look at the clean and intuitive interface',
@@ -138,12 +143,24 @@ const translations = {
         downloadSubtitle: 'Get started with fast and secure file sharing today',
         
         windowsTitle: 'For Windows',
-        windowsDesc: 'Windows 10/11 compatible version with all features included.',
+        windowsDesc: 'Windows 10/11 compatible.',
         downloadWindows: 'Download for Windows',
         
         androidTitle: 'For Android',
         androidDesc: 'Android 7.0 (API 24) or newer.',
         downloadAndroid: 'Download for Android',
+        
+        // Android Architecture Selection
+        selectAndroidVersion: 'Select Android Version',
+        androidArchitectures: {
+            'android-arm64-v8a': 'ARM64 (64-bit) - Recommended for most modern devices',
+            'android-armeabi-v7a': 'ARM (32-bit) - For older devices',
+            'android-x86_64': 'x86_64 - For Intel/AMD processors',
+            'android-universal': 'Universal - Works on all devices (larger file size)'
+        },
+        selectArchitecture: 'Select Architecture',
+        downloadNow: 'Download Now',
+        cancel: 'Cancel',
         
         viewAllReleases: 'View All Releases',
         
@@ -224,7 +241,7 @@ const translations = {
         feature5Desc: 'Giao diện đơn giản, trực quan mà ai cũng có thể sử dụng mà không cần kiến thức kỹ thuật.',
         
         feature6Title: 'Mã nguồn mở',
-        feature6Desc: 'Hoàn toàn mã nguồn mở với giấy phép MIT. Đóng góp và cải thiện nó.',
+        feature6Desc: 'Hoàn toàn mã nguồn mở với giấy phép GPL-3.0.',
         
         // Screenshots
         screenshotsTitle: 'Xem hoạt động',
@@ -235,12 +252,24 @@ const translations = {
         downloadSubtitle: 'Bắt đầu với việc chia sẻ file nhanh chóng và an toàn ngay hôm nay',
         
         windowsTitle: 'Cho Windows',
-        windowsDesc: 'Phiên bản tương thích Windows 10/11 với đầy đủ tính năng.',
+        windowsDesc: 'Phiên bản tương thích trên Windows 10/11.',
         downloadWindows: 'Tải cho Windows',
         
         androidTitle: 'Cho Android',
         androidDesc: 'Android 7.0 (API 24) hoặc mới hơn.',
         downloadAndroid: 'Tải cho Android',
+        
+        // Android Architecture Selection
+        selectAndroidVersion: 'Chọn phiên bản Android',
+        androidArchitectures: {
+            'android-arm64-v8a': 'ARM64 (64-bit) - Khuyến nghị cho hầu hết thiết bị hiện đại',
+            'android-armeabi-v7a': 'ARM (32-bit) - Dành cho thiết bị cũ',
+            'android-x86_64': 'x86_64 - Dành cho bộ xử lý Intel/AMD',
+            'android-universal': 'Universal - Hoạt động trên mọi thiết bị (kích thước file lớn hơn)'
+        },
+        selectArchitecture: 'Chọn kiến trúc',
+        downloadNow: 'Tải ngay',
+        cancel: 'Hủy',
         
         viewAllReleases: 'Xem tất cả phiên bản',
         

@@ -190,28 +190,54 @@ const P2LANApp = {
     bindDownloadLinks() {
         if (!this.config.links) return;
         
-        // Windows download
-        const windowsBtn = document.querySelector('[data-download="windows"]');
-        if (windowsBtn && this.config.links.downloads.windows) {
-            windowsBtn.addEventListener('click', () => {
-                this.trackDownload('windows');
-                window.open(this.config.links.downloads.windows, '_blank');
-            });
-        }
+        // Handle all Windows download buttons
+        const windowsBtns = document.querySelectorAll('[data-download="windows"]');
+        windowsBtns.forEach(btn => {
+            // Check if this is the hero button (not in download section)
+            const isHeroButton = btn.closest('.hero') !== null;
+            
+            if (isHeroButton) {
+                // Hero button - scroll to download section
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const downloadSection = document.getElementById('download');
+                    if (downloadSection) {
+                        const headerOffset = 80; // Account for fixed navbar
+                        const elementPosition = downloadSection.offsetTop;
+                        const offsetPosition = elementPosition - headerOffset;
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            } else {
+                // Download section button - actual download
+                if (this.config.links.downloads.windows) {
+                    btn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        this.trackDownload('windows');
+                        window.open(this.config.links.downloads.windows, '_blank');
+                    });
+                }
+            }
+        });
         
-        // Android download
+        // Android download - show architecture selection dialog
         const androidBtn = document.querySelector('[data-download="android"]');
         if (androidBtn && this.config.links.downloads.android) {
-            androidBtn.addEventListener('click', () => {
-                this.trackDownload('android');
-                window.open(this.config.links.downloads.android, '_blank');
+            androidBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.showAndroidArchitectureDialog();
             });
         }
         
         // GitHub releases
         const releasesBtn = document.querySelector('[data-link="releases"]');
         if (releasesBtn && this.config.links.downloads.github_releases) {
-            releasesBtn.addEventListener('click', () => {
+            releasesBtn.addEventListener('click', (e) => {
+                e.preventDefault();
                 window.open(this.config.links.downloads.github_releases, '_blank');
             });
         }
@@ -220,11 +246,30 @@ const P2LANApp = {
         const githubBtns = document.querySelectorAll('[data-link="github"]');
         githubBtns.forEach(btn => {
             if (this.config.links.github) {
-                btn.addEventListener('click', () => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
                     window.open(this.config.links.github, '_blank');
                 });
             }
         });
+        
+        // Issues link
+        const issuesBtn = document.querySelector('[data-link="issues"]');
+        if (issuesBtn && this.config.links.docs.issues) {
+            issuesBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.open(this.config.links.docs.issues, '_blank');
+            });
+        }
+        
+        // Documentation link
+        const docsBtn = document.querySelector('[data-link="docs"]');
+        if (docsBtn && this.config.links.docs.guide) {
+            docsBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.open(this.config.links.docs.guide, '_blank');
+            });
+        }
     },
 
     // ===== MOBILE NAVIGATION =====
@@ -268,6 +313,8 @@ const P2LANApp = {
     // ===== SCROLL EFFECTS =====
     initScrollEffects() {
         const navbar = document.querySelector('.navbar');
+        if (!navbar) return;
+        
         let lastScrollTop = 0;
         let ticking = false;
 
@@ -284,14 +331,19 @@ const P2LANApp = {
                 navbar.style.background = isDark ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.95)';
             }
 
-            // Hide/show navbar on scroll (optional)
-            if (Math.abs(lastScrollTop - scrollTop) <= 5) return;
+            // Always keep navbar visible on desktop
+            const isMobile = window.innerWidth <= 768;
             
-            if (scrollTop > lastScrollTop && scrollTop > 100) {
-                // Scrolling down
-                navbar.style.transform = 'translateY(-100%)';
-            } else {
-                // Scrolling up
+            if (isMobile && Math.abs(lastScrollTop - scrollTop) > 5) {
+                if (scrollTop > lastScrollTop && scrollTop > 100) {
+                    // Scrolling down on mobile - hide navbar
+                    navbar.style.transform = 'translateY(-100%)';
+                } else {
+                    // Scrolling up on mobile - show navbar
+                    navbar.style.transform = 'translateY(0)';
+                }
+            } else if (!isMobile) {
+                // Always show navbar on desktop
                 navbar.style.transform = 'translateY(0)';
             }
             
@@ -306,7 +358,16 @@ const P2LANApp = {
             }
         };
 
+        // Initial call to set correct state on load
+        updateNavbar();
+        
+        // Listen for scroll events
         window.addEventListener('scroll', requestNavbarUpdate, { passive: true });
+        
+        // Listen for resize events to handle desktop/mobile changes
+        window.addEventListener('resize', this.debounce(() => {
+            updateNavbar();
+        }, 100), { passive: true });
         
         // Update active nav link based on scroll position
         this.updateActiveNavLink();
@@ -575,6 +636,156 @@ const P2LANApp = {
         }
         
         console.log(`Download tracked: ${platform}`);
+    },
+
+    // ===== ANDROID ARCHITECTURE SELECTION =====
+    showAndroidArchitectureDialog() {
+        const t = this.translations[this.currentLang] || this.translations.en;
+        
+        // Create modal backdrop
+        const backdrop = document.createElement('div');
+        backdrop.className = 'android-dialog-backdrop';
+        backdrop.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        `;
+        
+        // Create dialog
+        const dialog = document.createElement('div');
+        dialog.className = 'android-dialog';
+        dialog.style.cssText = `
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        `;
+        
+        // Dialog content
+        dialog.innerHTML = `
+            <h3 style="margin: 0 0 1rem 0; color: var(--text-primary); font-size: 1.5rem;">
+                ${t.selectAndroidVersion || 'Select Android Version'}
+            </h3>
+            <p style="margin: 0 0 1.5rem 0; color: var(--text-secondary);">
+                ${t.selectArchitecture || 'Select the architecture that matches your device:'}
+            </p>
+            <div class="architecture-options" style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem;">
+                ${Object.entries(this.config.links.downloads.android).map(([arch, url]) => `
+                    <button class="arch-option" data-arch="${arch}" data-url="${url}" style="
+                        padding: 1rem;
+                        border: 2px solid var(--text-muted);
+                        border-radius: var(--radius-md);
+                        background: var(--bg-secondary);
+                        color: var(--text-primary);
+                        text-align: left;
+                        cursor: pointer;
+                        transition: all 0.2s ease;
+                        font-size: 0.9rem;
+                        line-height: 1.4;
+                    ">
+                        <div style="font-weight: 600; margin-bottom: 0.25rem;">
+                            ${arch.replace('android-', '').toUpperCase()}
+                        </div>
+                        <div style="color: var(--text-secondary); font-size: 0.85rem;">
+                            ${t.androidArchitectures[arch] || arch}
+                        </div>
+                    </button>
+                `).join('')}
+            </div>
+            <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <button class="cancel-btn" style="
+                    padding: 0.75rem 1.5rem;
+                    border: 2px solid var(--text-muted);
+                    border-radius: var(--radius-md);
+                    background: transparent;
+                    color: var(--text-secondary);
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                ">
+                    ${t.cancel || 'Cancel'}
+                </button>
+            </div>
+        `;
+        
+        backdrop.appendChild(dialog);
+        document.body.appendChild(backdrop);
+        
+        // Show dialog with animation
+        requestAnimationFrame(() => {
+            backdrop.style.opacity = '1';
+            dialog.style.transform = 'scale(1)';
+        });
+        
+        // Add event listeners
+        const archOptions = dialog.querySelectorAll('.arch-option');
+        const cancelBtn = dialog.querySelector('.cancel-btn');
+        
+        archOptions.forEach(option => {
+            option.addEventListener('mouseover', () => {
+                option.style.borderColor = 'var(--primary-color)';
+                option.style.background = 'var(--bg-hover)';
+            });
+            
+            option.addEventListener('mouseout', () => {
+                option.style.borderColor = 'var(--text-muted)';
+                option.style.background = 'var(--bg-secondary)';
+            });
+            
+            option.addEventListener('click', () => {
+                const arch = option.getAttribute('data-arch');
+                const url = option.getAttribute('data-url');
+                this.trackDownload(`android-${arch}`);
+                window.open(url, '_blank');
+                this.closeAndroidDialog(backdrop);
+            });
+        });
+        
+        cancelBtn.addEventListener('click', () => {
+            this.closeAndroidDialog(backdrop);
+        });
+        
+        backdrop.addEventListener('click', (e) => {
+            if (e.target === backdrop) {
+                this.closeAndroidDialog(backdrop);
+            }
+        });
+        
+        // Close on Escape key
+        const handleEscape = (e) => {
+            if (e.key === 'Escape') {
+                this.closeAndroidDialog(backdrop);
+                document.removeEventListener('keydown', handleEscape);
+            }
+        };
+        document.addEventListener('keydown', handleEscape);
+        
+        // Prevent body scroll
+        document.body.style.overflow = 'hidden';
+    },
+    
+    closeAndroidDialog(backdrop) {
+        backdrop.style.opacity = '0';
+        backdrop.querySelector('.android-dialog').style.transform = 'scale(0.9)';
+        
+        setTimeout(() => {
+            document.body.removeChild(backdrop);
+            document.body.style.overflow = '';
+        }, 300);
     },
 
     // ===== THEME SWITCHING (Optional) =====

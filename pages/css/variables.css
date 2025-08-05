@@ -43,6 +43,7 @@ a {
     
     /* Backgrounds */
     --bg-primary: #ffffff;
+    --bg-primary-rgb: 255, 255, 255;
     --bg-secondary: #f8fafc;
     --bg-tertiary: #f1f5f9;
     --bg-dark: #0f172a;
@@ -113,6 +114,7 @@ a {
     
     /* Backgrounds */
     --bg-primary: #0f172a;
+    --bg-primary-rgb: 15, 23, 42;
     --bg-secondary: #1e293b;
     --bg-tertiary: #334155;
     --bg-hover: rgba(99, 102, 241, 0.1);

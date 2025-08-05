@@ -6,6 +6,9 @@
 
 A simple cross-platform file transfer application that enables direct peer-to-peer communication over local networks. Built with Flutter for Windows and Android platforms.
 
+>There is a minor bug with the chat function. If one person starts a conversation unilaterally, the other person's replies won't be received.<br>
+>To solve this, one person needs to exit and re-enter the chat to fully initialize the conversation. Alternatively, both users can proactively add each other's profiles to their chat list before sending the first message.
+
 ## 📸 Screenshot
 
 <div align="center">
@@ -138,7 +141,9 @@ lib/
 
 P2Lan Transfer helps you transfer data between devices on the same network more easily. If you find it useful, consider supporting me to maintain and improve it. Thank you very much!
 
-You can donate either via [**Github Sponsor**](https://github.com/sponsors/TrongAJTT/) or **[Buy me a coffee](buymeacoffee.com/trongajtt)** (write your feelings about the application). More details about inside the app.
+You can donate either via [**Github Sponsor**](https://github.com/sponsors/TrongAJTT/) or [**Buy me a coffee**](https://www.buymeacoffee.com/trongajtt) (write your feelings about the application).
+
+More details about inside the app.
 
 ## 🤝 Contributing
 
@@ -151,6 +156,8 @@ Contributions are welcome! Feel free to:
 ## 📄 License
 
 This project is licensed under the GPL-3.0 License.
+
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 
 ## 🙏 Credits
 
