@@ -786,7 +786,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get p2pPermissionExplanation =>
-      'To discover nearby devices using WiFi, this app needs access to your location. This is an Android requirement for scanning WiFi networks. Your location data is not stored or shared. The app is client-side and we do not collect any user data.';
+      'To discover nearby devices using WiFi, this app needs access to your location. This is an Android requirement for scanning WiFi networks.';
 
   @override
   String get p2pPermissionContinue => 'Continue';
@@ -800,7 +800,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get p2pNearbyDevicesPermissionExplanation =>
-      'To discover nearby devices on modern Android versions, this app needs access to nearby WiFi devices. This permission allows the app to scan for WiFi networks without accessing your location. Your data is not stored or shared. The app is client-side and we do not collect any user data.';
+      'To discover nearby devices on modern Android versions, this app needs access to nearby WiFi devices. This permission allows the app to scan for WiFi networks without accessing your location.';
 
   @override
   String get sendData => 'Send Data';

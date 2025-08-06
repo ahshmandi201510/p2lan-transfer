@@ -1571,7 +1571,7 @@ abstract class AppLocalizations {
   /// Explanation for why location permission is needed for P2P
   ///
   /// In en, this message translates to:
-  /// **'To discover nearby devices using WiFi, this app needs access to your location. This is an Android requirement for scanning WiFi networks. Your location data is not stored or shared. The app is client-side and we do not collect any user data.'**
+  /// **'To discover nearby devices using WiFi, this app needs access to your location. This is an Android requirement for scanning WiFi networks.'**
   String get p2pPermissionExplanation;
 
   /// Button text to continue with granting permission
@@ -1595,7 +1595,7 @@ abstract class AppLocalizations {
   /// Explanation for why nearby WiFi devices permission is needed for P2P
   ///
   /// In en, this message translates to:
-  /// **'To discover nearby devices on modern Android versions, this app needs access to nearby WiFi devices. This permission allows the app to scan for WiFi networks without accessing your location. Your data is not stored or shared. The app is client-side and we do not collect any user data.'**
+  /// **'To discover nearby devices on modern Android versions, this app needs access to nearby WiFi devices. This permission allows the app to scan for WiFi networks without accessing your location.'**
   String get p2pNearbyDevicesPermissionExplanation;
 
   /// No description provided for @sendData.

@@ -5,10 +5,8 @@ import 'package:p2lantransfer/l10n/app_localizations.dart';
 import 'package:p2lantransfer/screens/p2lan_transfer/p2lan_transfer_screen.dart';
 import 'package:p2lantransfer/screens/app_setup_screen.dart';
 import 'package:p2lantransfer/services/isar_service.dart';
-import 'package:p2lantransfer/services/profile_tab_service.dart';
 import 'package:p2lantransfer/services/settings_models_service.dart';
 import 'package:p2lantransfer/services/app_logger.dart';
-import 'package:p2lantransfer/services/number_format_service.dart';
 import 'package:p2lantransfer/services/app_installation_service.dart';
 import 'package:p2lantransfer/services/p2p_services/p2p_notification_service.dart';
 import 'package:p2lantransfer/services/p2p_services/p2p_service_manager.dart';
@@ -68,10 +66,6 @@ bool _isFirstTimeSetup = false;
 Future<void> completeServicesInitialization() async {
   try {
     logInfo('Completing services initialization after setup...');
-
-    // Initialize ProfileTabService
-    await ProfileTabService.instance.initialize();
-    logInfo('ProfileTabService initialized');
 
     // Initialize P2P Service Manager (includes chat service and all P2P services)
     await P2PServiceManager.init();
@@ -177,12 +171,6 @@ Future<void> main() async {
 
   // Initialize other services in background after UI starts
   _initializeServicesInBackground();
-
-  // Only initialize tabs if not first time setup
-  if (!_isFirstTimeSetup) {
-    // Đảm bảo khởi tạo tabs trước khi build UI
-    await ProfileTabService.instance.initialize();
-  }
 
   runApp(const MainApp());
 }
@@ -321,9 +309,6 @@ class _MainAppState extends State<MainApp> with WidgetsBindingObserver {
     return AnimatedBuilder(
       animation: settingsController,
       builder: (context, _) {
-        // Initialize number formatting with current locale
-        NumberFormatService.initialize(settingsController.locale);
-
         return MaterialApp(
           title: appName,
           debugShowCheckedModeBanner: false,

@@ -39,26 +39,9 @@ class CacheInfo {
 }
 
 class CacheService {
-  static const String _templatesKey = 'templates';
   // Cache keys for different features
   static const Map<String, List<String>> _cacheKeys = {
-    'text_templates': [_templatesKey],
     'settings': ['themeMode', 'language'],
-    'random_generators': [
-      'generation_history_enabled',
-      'generation_history_password',
-      'generation_history_number',
-      'generation_history_date',
-      'generation_history_time',
-      'generation_history_date_time',
-      'generation_history_color',
-      'generation_history_latin_letter',
-      'generation_history_playing_card',
-      'generation_history_coin_flip',
-      'generation_history_dice_roll',
-      'generation_history_rock_paper_scissors',
-    ],
-    'converter_tools': [],
     'p2lan_transfer': [],
   };
   static Future<Map<String, CacheInfo>> getAllCacheInfo({

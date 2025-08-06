@@ -1,4 +1,6 @@
 // ===== CONFIGURATION & LINKS MANAGEMENT =====
+const version = '1.0.1'; // Define the version here for easy reference
+
 const AppConfig = {
     // ===== EXTERNAL LINKS =====
     links: {
@@ -7,12 +9,12 @@ const AppConfig = {
         
         // Download Links
         downloads: {
-            windows: 'https://github.com/TrongAJTT/p2lan-transfer/releases/download/v1.0.0/P2Lan-Transfer-v1.0.0-windows-x64-release.7z',
+            windows: `https://github.com/TrongAJTT/p2lan-transfer/releases/latest/download//P2Lan-Transfer-${version}-windows-x64-release.7z`,
             android: {
-                'android-arm64-v8a': 'https://github.com/TrongAJTT/p2lan-transfer/releases/download/v1.0.0/P2Lan-Transfer-v1.0.0-android-arm64-v8a-release.apk',
-                'android-armeabi-v7a': 'https://github.com/TrongAJTT/p2lan-transfer/releases/download/v1.0.0/P2Lan-Transfer-v1.0.0-android-armeabi-v7a-release.apk',
-                'android-x86_64': 'https://github.com/TrongAJTT/p2lan-transfer/releases/download/v1.0.0/P2Lan-Transfer-v1.0.0-android-x86_64-release.apk',
-                'android-universal': 'https://github.com/TrongAJTT/p2lan-transfer/releases/download/v1.0.0/P2Lan-Transfer-v1.0.0-android-universal-release.apk'
+                'android-arm64-v8a': `https://github.com/TrongAJTT/p2lan-transfer/releases/latest/download/P2Lan-Transfer-${version}-android-arm64-v8a-release.apk`,
+                'android-armeabi-v7a': `https://github.com/TrongAJTT/p2lan-transfer/releases/latest/download/P2Lan-Transfer-${version}-android-armeabi-v7a-release.apk`,
+                'android-x86_64': `https://github.com/TrongAJTT/p2lan-transfer/releases/latest/download/P2Lan-Transfer-${version}-android-x86_64-release.apk`,
+                'android-universal': `https://github.com/TrongAJTT/p2lan-transfer/releases/latest/download/P2Lan-Transfer-${version}-android-universal-release.apk`
             },
             github_releases: 'https://github.com/TrongAJTT/p2lan-transfer/releases'
         },

@@ -313,7 +313,7 @@
   "@p2pPermissionRequiredTitle": {
     "description": "Title for the permission request dialog"
   },
-  "p2pPermissionExplanation": "To discover nearby devices using WiFi, this app needs access to your location. This is an Android requirement for scanning WiFi networks. Your location data is not stored or shared. The app is client-side and we do not collect any user data.",
+  "p2pPermissionExplanation": "To discover nearby devices using WiFi, this app needs access to your location. This is an Android requirement for scanning WiFi networks.",
   "@p2pPermissionExplanation": {
     "description": "Explanation for why location permission is needed for P2P"
   },
@@ -329,7 +329,7 @@
   "@p2pNearbyDevicesPermissionTitle": {
     "description": "Title for the nearby devices permission request dialog"
   },
-  "p2pNearbyDevicesPermissionExplanation": "To discover nearby devices on modern Android versions, this app needs access to nearby WiFi devices. This permission allows the app to scan for WiFi networks without accessing your location. Your data is not stored or shared. The app is client-side and we do not collect any user data.",
+  "p2pNearbyDevicesPermissionExplanation": "To discover nearby devices on modern Android versions, this app needs access to nearby WiFi devices. This permission allows the app to scan for WiFi networks without accessing your location.",
   "@p2pNearbyDevicesPermissionExplanation": {
     "description": "Explanation for why nearby WiFi devices permission is needed for P2P"
   },

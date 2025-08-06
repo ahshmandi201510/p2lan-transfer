@@ -789,7 +789,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get p2pPermissionExplanation =>
-      'Để khám phá các thiết bị lân cận bằng WiFi, ứng dụng này cần quyền truy cập vị trí của bạn. Đây là yêu cầu của Android để quét các mạng WiFi. Dữ liệu vị trí của bạn không được lưu trữ hoặc chia sẻ. Ứng dụng hoạt động phía máy khách và chúng tôi không thu thập bất kỳ dữ liệu người dùng nào.';
+      'Để khám phá các thiết bị lân cận bằng WiFi, ứng dụng này cần quyền truy cập vị trí của bạn. Đây là yêu cầu của Android để quét các mạng WiFi.';
 
   @override
   String get p2pPermissionContinue => 'Tiếp tục';
@@ -803,7 +803,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get p2pNearbyDevicesPermissionExplanation =>
-      'Để khám phá các thiết bị lân cận trên các phiên bản Android hiện đại, ứng dụng này cần quyền truy cập các thiết bị WiFi gần đó. Quyền này cho phép ứng dụng quét các mạng WiFi mà không cần quyền truy cập vị trí. Dữ liệu của bạn không được lưu trữ hoặc chia sẻ. Ứng dụng hoạt động phía máy khách và chúng tôi không thu thập bất kỳ dữ liệu người dùng nào.';
+      'Để khám phá các thiết bị lân cận trên các phiên bản Android hiện đại, ứng dụng này cần quyền truy cập các thiết bị WiFi gần đó. Quyền này cho phép ứng dụng quét các mạng WiFi mà không cần quyền truy cập vị trí.';
 
   @override
   String get sendData => 'Gửi Dữ Liệu';

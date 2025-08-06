@@ -91,7 +91,7 @@ class PermissionUtils {
     }
   }
 
-  /// Request nearby WiFi devices permission (Android 12+)
+  /// Request nearby WiFi devices permission (Android 13+)
   static Future<bool> _requestNearbyDevicesPermission() async {
     if (!Platform.isAndroid) return true;
 
@@ -99,8 +99,8 @@ class PermissionUtils {
       final androidInfo = await DeviceInfoPlugin().androidInfo;
       final sdkInt = androidInfo.version.sdkInt;
 
-      // Only request for Android 12+ (API 31+)
-      if (sdkInt >= 31) {
+      // Only request for Android 13+ (API 33+)
+      if (sdkInt >= 33) {
         final status = await Permission.nearbyWifiDevices.request();
         logInfo('Nearby WiFi devices permission status: $status');
         return status.isGranted;
@@ -189,7 +189,7 @@ class PermissionUtils {
 
     // Check if this permission is needed (Android 12+)
     final androidSdk = await _getAndroidSdkVersion();
-    if (androidSdk < 31) return true; // Not needed for older Android
+    if (androidSdk < 33) return true; // Not needed for older Android
 
     // Show explanation dialog first
     bool userConfirmed = false;
