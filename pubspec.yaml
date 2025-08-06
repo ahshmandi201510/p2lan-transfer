@@ -1,7 +1,7 @@
 name: p2lantransfer
 description: P2Lan Transfer - Make LAN transfers easy, no server needed.
 publish_to: 'none'
-version: 1.0.1
+version: 1.0.2
 
 environment:
   sdk: '>=3.0.0 <4.0.0'

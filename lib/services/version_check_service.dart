@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:p2lantransfer/l10n/app_localizations.dart';
+import 'package:p2lantransfer/services/app_logger.dart';
 import 'package:p2lantransfer/utils/localization_utils.dart';
 import 'package:p2lantransfer/utils/url_utils.dart';
 import 'package:p2lantransfer/variables.dart';
@@ -39,6 +40,7 @@ class ReleaseAsset {
 
 class ReleaseInfo {
   final String name;
+  final String tag;
   final String body;
   final DateTime publishedAt;
   final List<ReleaseAsset> assets;
@@ -46,6 +48,7 @@ class ReleaseInfo {
   ReleaseInfo({
     required this.name,
     required this.body,
+    required this.tag,
     required this.publishedAt,
     required this.assets,
   });
@@ -57,8 +60,9 @@ class ReleaseInfo {
         [];
 
     return ReleaseInfo(
-      name: json['name'] ?? json['tag_name'] ?? '',
-      body: json['body'] ?? '',
+      name: json['name'],
+      tag: json['tag_name'],
+      body: json['body'],
       publishedAt: DateTime.parse(
           json['published_at'] ?? DateTime.now().toIso8601String()),
       assets: assetsList,
@@ -92,11 +96,12 @@ class VersionCheckService {
     try {
       final packageInfo = await PackageInfo.fromPlatform();
       final currentVersion = packageInfo.version;
+
       final releaseInfo = await fetchLatestRelease();
 
       if (releaseInfo == null) return true;
 
-      return _compareVersions(currentVersion, releaseInfo.name) >= 0;
+      return _compareVersions(currentVersion, releaseInfo.tag) >= 0;
     } catch (e) {
       return true; // If we can't check, assume it's latest to avoid false positives
     }
@@ -153,7 +158,7 @@ class VersionCheckService {
 
         if (releaseInfo != null) {
           final isLatest =
-              _compareVersions(packageInfo.version, releaseInfo.name) >= 0;
+              _compareVersions(packageInfo.version, releaseInfo.tag) >= 0;
           _showReleaseInfoDialog(context, releaseInfo, packageInfo, isLatest);
         } else {
           _showErrorDialog(context, loc.noNewUpdates);

@@ -2,12 +2,13 @@
 
 All notable changes since release will be documented in this file.
 
-## [1.0.1] - 2025-08-06
+## [1.0.1], [1.0.2] - 2025-08-06
 
 Hotfix
 
 ### Fixed
 - The request for nearby Wi-Fi devices was moved to Android 13, so Android 12 devices are no longer asked for a non-existent permission.
+- Fixed an issue where the update feature failed to find new updates.
 
 ## [1.0.0] - 2025-08-05
 
