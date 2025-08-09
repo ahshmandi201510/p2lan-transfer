@@ -2,6 +2,20 @@
 
 All notable changes since release will be documented in this file.
 
+## [1.1.0] - 2025-08-09
+
+## Added
+- Indicators to distinguish between incoming and outgoing transfer tasks.
+- A toggle button to switch the view between incoming tasks, outgoing tasks, or both.
+- A new setting in the General section to control whether tasks are cleared at app startup.
+- A new setting in the General section to automatically check for updates once per day.
+- A new “Author’s Productions” view on the About page.
+- Internet connectivity checks added to the Supporters’ view page, Terms page, Check New Version page, and Author’s Productions page.
+
+## Changed
+- Completed task cleanup is now disabled by default.
+- Transfer tasks are now fully saved to the database.
+
 ## [1.0.1], [1.0.2] - 2025-08-06
 
 Hotfix

@@ -408,6 +408,24 @@ class _P2PGeneralSettingsState extends State<P2PGeneralSettings> {
               loc.transferProgressAutoCleanup, Icons.auto_delete),
           const SizedBox(height: 16),
 
+          // Startup cleanup - its own card above the rest
+          Card(
+            child: SwitchListTile.adaptive(
+              title: Text(loc.clearTransfersAtStartup),
+              subtitle: Text(loc.clearTransfersAtStartupDesc),
+              value: _settings!.clearTransfersAtStartup,
+              onChanged: (value) async {
+                setState(() {
+                  _settings =
+                      _settings!.copyWith(clearTransfersAtStartup: value);
+                });
+                await _saveSettings();
+              },
+              secondary: const Icon(Icons.auto_delete),
+            ),
+          ),
+          const SizedBox(height: 12),
+
           Card(
             child: Padding(
               padding: const EdgeInsets.all(16),
@@ -534,6 +552,26 @@ class _P2PGeneralSettingsState extends State<P2PGeneralSettings> {
               },
               layout: OptionSliderLayout.none,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
+          // App Update Section (auto check updates daily)
+          _buildSectionHeader(loc.about, Icons.system_update_alt),
+          const SizedBox(height: 16),
+          Card(
+            child: SwitchListTile.adaptive(
+              title: Text(loc.autoCheckUpdatesDaily),
+              subtitle: Text(loc.autoCheckUpdatesDailyDesc),
+              value: _settings!.autoCheckUpdatesDaily,
+              onChanged: (value) async {
+                setState(() {
+                  _settings = _settings!.copyWith(autoCheckUpdatesDaily: value);
+                });
+                await _saveSettings();
+              },
+              secondary: const Icon(Icons.update),
             ),
           ),
         ],

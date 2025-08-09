@@ -734,6 +734,9 @@
     }
   },
   "p2pNetworkingPaused": "P2P networking is paused due to internet connection loss. It will automatically resume when connection is restored.",
+  "internetRequiredToViewThisPage": "Please connect to the internet to view this page",
+  "noInternetPleaseConnectAndTryAgain": "No internet connection. Please connect and try again.",
+  "noInternetToFetchNewUpdate": "No internet connection to fetch new update. Please connect and try again.",
   "noDevicesInRange": "No devices in range. Try refreshing.",
   "initialDiscoveryInProgress": "Initial discovery in progress...",
   "refreshing": "Refreshing...",
@@ -1141,6 +1144,14 @@
   "failedTransfers": "Failed transfers",
   "removeProgressOnFail": "Remove progress when transfers fail",
   "cleanupDelay": "Cleanup delay",
+  "autoCheckUpdatesDaily": "Auto check for updates",
+  "@autoCheckUpdatesDaily": {"description": "Toggle to automatically check for app updates once per day"},
+  "autoCheckUpdatesDailyDesc": "Check for updates once a day and notify when a new version is available",
+  "@autoCheckUpdatesDailyDesc": {"description": "Description for daily update check"},
+  "clearTransfersAtStartup": "Clear transfers at startup",
+  "@clearTransfersAtStartup": {"description": "Setting label to clear old transfer items on app startup"},
+  "clearTransfersAtStartupDesc": "Automatically clear old transfer progress when the app starts",
+  "@clearTransfersAtStartupDesc": {"description": "Setting description for startup cleanup of transfer progress"},
 
   "notificationRequestPermission": "Request Notification Permission",
   "notificationRequestPermissionDesc": "The app needs to be granted notification permission in order to notify you. If you have pressed the 'Grant Permission' button but the permission dialog still does not appear, please manually grant notification permission in the app's permission settings.",
@@ -1217,6 +1228,50 @@
     }
   },
   "currentPlatform": "Current platform",
-  "eerror": "Error"
+  "eerror": "Error",
+  "stopped": "Stopped",
+  "completedInTime": "Completed in {duration}",
+  "@completedInTime": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "transferredInTime": "Transferred in {duration}",
+  "@transferredInTime": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingInTime": "Waiting for {duration}",
+  "@waitingInTime": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "transferStatusViewAll": "View: All",
+  "transferStatusViewOutgoing": "View: Only outgoing",
+  "transferStatusViewIncoming": "View: Only incoming",
 
+  "authorProducts": "Other Products",
+  "authorProductsDesc": "View other products by the author, maybe you'll find something interesting!",
+  "authorProductsMessage": "Hi there! Here are some of my other products. If you're interested, feel free to check them out! I hope you'll find something useful among them. Thank you for visiting!",
+  "noOtherProducts": "No other products available",
+  "loadingProducts": "Loading products...",
+  "failedToLoadProducts": "Failed to load products",
+  "retryLoadProducts": "Retry loading products",
+  "visitProduct": "Visit Product",
+  "productCount": "{count} product(s)",
+  "@productCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

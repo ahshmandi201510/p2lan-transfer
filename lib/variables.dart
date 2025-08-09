@@ -1,5 +1,8 @@
+import 'package:flutter/material.dart';
+
 const VersionType currentVersionType = VersionType.release;
 const String githubRepoUrl = 'https://github.com/TrongAJTT/p2lan-transfer';
+const String appCode = 'p2lan_transfer';
 const String appName = 'P2Lan Transfer';
 const String appSlogan = "Make LAN transfers easy, no server needed'";
 const String appAssetIcon = 'assets/app_icon.png';
@@ -20,6 +23,10 @@ const String donnorsAcknowledgmentUrl =
 
 const String latestReleaseEndpoint =
     'https://api.github.com/repos/TrongAJTT/p2lan-transfer/releases/latest';
+const String authorProductsEndpoint =
+    'https://raw.githubusercontent.com/TrongAJTT/TrongAJTT/refs/heads/main/MY_PRODUCTS.json';
+const String authorAvatarEndpoint =
+    'https://avatars.githubusercontent.com/u/157729907?v=4';
 
 const String userAgent = "P2Lan-Transfer-App";
 
@@ -28,6 +35,9 @@ const double desktopScreenWidthThreshold = 1024.0;
 
 const int p2pChatMediaWaitTimeBeforeDelete = 6; // seconds
 const int p2pChatClipboardPollingInterval = 3; // seconds
+
+const Color sendColor = Colors.blue;
+const Color receiveColor = Colors.yellow;
 
 // This enum represents the different types of app versions.
 // It is used to determine the current version type of the application.

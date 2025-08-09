@@ -4,6 +4,7 @@ import 'package:p2lantransfer/models/p2p_models.dart';
 import 'package:p2lantransfer/widgets/generic/generic_context_menu.dart';
 import 'package:p2lantransfer/widgets/p2p/data_transfer_progress_widget.dart';
 import 'package:p2lantransfer/utils/generic_dialog_utils.dart';
+import 'package:p2lantransfer/variables.dart';
 
 class TransferBatchWidget extends StatefulWidget {
   final String? batchId;
@@ -174,13 +175,31 @@ class _TransferBatchWidgetState extends State<TransferBatchWidget> {
                           fontSize: 16,
                         ),
                       ),
-                      Text(
-                        statusText,
-                        style: TextStyle(
-                          color: headerColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            sampleTask.isOutgoing
+                                ? Icons.file_upload
+                                : Icons.file_download,
+                            size: 16,
+                            color: sampleTask.isOutgoing
+                                ? sendColor
+                                : receiveColor,
+                          ),
+                          const SizedBox(width: 6),
+                          Flexible(
+                            child: Text(
+                              statusText,
+                              style: TextStyle(
+                                color: headerColor,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),

@@ -4,9 +4,11 @@ import 'package:p2lantransfer/l10n/app_localizations.dart';
 import 'dart:convert';
 import 'package:p2lantransfer/models/donor_model.dart';
 import 'package:p2lantransfer/services/app_logger.dart';
+import 'package:p2lantransfer/utils/network_utils.dart';
 import 'package:p2lantransfer/utils/widget_layout_render_helper.dart';
 import 'package:intl/intl.dart';
 import 'package:p2lantransfer/variables.dart';
+import 'package:p2lantransfer/widgets/generic/network_required_placeholder.dart';
 
 class DonorsAcknowledgmentScreen extends StatefulWidget {
   const DonorsAcknowledgmentScreen({super.key});
@@ -22,11 +24,21 @@ class _DonorsAcknowledgmentScreenState
   late AppLocalizations _loc;
   bool _isLoading = true;
   String? _error;
+  bool _hasNetwork = true;
 
   @override
   void initState() {
     super.initState();
-    _loadDonors();
+    _checkNetworkThenLoad();
+  }
+
+  Future<void> _checkNetworkThenLoad() async {
+    final has = await NetworkUtils.isNetworkAvailable();
+    if (!mounted) return;
+    setState(() => _hasNetwork = has);
+    if (has) {
+      _loadDonors();
+    }
   }
 
   @override
@@ -91,6 +103,13 @@ class _DonorsAcknowledgmentScreenState
   }
 
   Widget _buildBody(ThemeData theme) {
+    if (!_hasNetwork) {
+      return NetworkRequiredPlaceholder(
+        title: _loc.noNetworkConnection,
+        description: _loc.internetRequiredToViewThisPage,
+      );
+    }
+
     if (_isLoading) {
       return Center(
         child: Column(

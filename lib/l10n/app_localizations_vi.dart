@@ -1116,7 +1116,19 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get p2pNetworkingPaused =>
-      'Mạng P2P tạm dừng do mất kết nối internet. Sẽ tự động khôi phục khi có kết nối.';
+      'Mạng P2P tạm dừng do mất kết nối mạng. Sẽ tự động khôi phục khi có kết nối.';
+
+  @override
+  String get internetRequiredToViewThisPage =>
+      'Cần kết nối mạng để xem trang này';
+
+  @override
+  String get noInternetPleaseConnectAndTryAgain =>
+      'Không có kết nối mạng. Vui lòng kết nối và thử lại.';
+
+  @override
+  String get noInternetToFetchNewUpdate =>
+      'Không có kết nối mạng để tải dữ liệu cập nhật. Vui lòng kết nối và thử lại.';
 
   @override
   String get noDevicesInRange => 'Không có thiết bị trong tầm. Thử làm mới.';
@@ -2062,6 +2074,20 @@ class AppLocalizationsVi extends AppLocalizations {
   String get cleanupDelay => 'Thời gian trì hoãn dọn dẹp';
 
   @override
+  String get autoCheckUpdatesDaily => 'Tự động kiểm tra cập nhật';
+
+  @override
+  String get autoCheckUpdatesDailyDesc =>
+      'Kiểm tra cập nhật mỗi ngày và thông báo khi có phiên bản mới';
+
+  @override
+  String get clearTransfersAtStartup => 'Xóa tiến trình truyền khi khởi động';
+
+  @override
+  String get clearTransfersAtStartupDesc =>
+      'Tự động xóa các tiến trình truyền cũ khi ứng dụng khởi động';
+
+  @override
   String get notificationRequestPermission => 'Yêu cầu quyền thông báo';
 
   @override
@@ -2144,4 +2170,62 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get eerror => 'Lỗi';
+
+  @override
+  String get stopped => 'Đã dừng';
+
+  @override
+  String completedInTime(String duration) {
+    return 'Hoàn thành trong $duration';
+  }
+
+  @override
+  String transferredInTime(String duration) {
+    return 'Đã chuyển $duration';
+  }
+
+  @override
+  String waitingInTime(String duration) {
+    return 'Đang chờ $duration';
+  }
+
+  @override
+  String get transferStatusViewAll => 'Xem: Tất cả';
+
+  @override
+  String get transferStatusViewOutgoing => 'Xem: Chỉ gửi đi';
+
+  @override
+  String get transferStatusViewIncoming => 'Xem: Chỉ nhận về';
+
+  @override
+  String get authorProducts => 'Sản phẩm khác';
+
+  @override
+  String get authorProductsDesc =>
+      'Xem các sản phẩm khác của tác giả, có thể bạn sẽ quan tâm!';
+
+  @override
+  String get authorProductsMessage =>
+      'Chào bạn! Đây là một số sản phẩm khác của tôi. Nếu bạn quan tâm, đừng ngần ngại xem qua nhé! Tôi hy vọng bạn sẽ tìm thấy điều gì đó hữu ích trong số này. Cảm ơn bạn đã ghé thăm!';
+
+  @override
+  String get noOtherProducts => 'Không có sản phẩm nào khác';
+
+  @override
+  String get loadingProducts => 'Đang tải sản phẩm...';
+
+  @override
+  String get failedToLoadProducts => 'Không thể tải sản phẩm';
+
+  @override
+  String get retryLoadProducts => 'Thử tải lại sản phẩm';
+
+  @override
+  String get visitProduct => 'Xem sản phẩm';
+
+  @override
+  String productCount(int count) {
+    return '$count sản phẩm';
+  }
 }

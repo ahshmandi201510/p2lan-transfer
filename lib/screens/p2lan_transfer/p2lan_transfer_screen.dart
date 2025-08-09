@@ -36,6 +36,9 @@ import 'package:p2lantransfer/utils/generic_table_builder.dart'
     as table_builder;
 import 'package:path_provider/path_provider.dart';
 
+// Filter mode for viewing transfer tasks
+enum TransferFilterMode { all, outgoing, incoming }
+
 class P2LanTransferScreen extends StatefulWidget {
   final bool isEmbedded;
   final Function(Widget, String, {String? parentCategory, IconData? icon})?
@@ -68,6 +71,9 @@ class _P2LanTransferScreenState extends State<P2LanTransferScreen> {
 
   // Flag to control keyboard listener and focus management
   bool _enableKeyboardShortcuts = true;
+
+  // Transfer view filter state
+  TransferFilterMode _transferFilterMode = TransferFilterMode.all;
 
   @override
   void initState() {
@@ -575,7 +581,7 @@ class _P2LanTransferScreenState extends State<P2LanTransferScreen> {
     PanelInfo tranferPanel = PanelInfo(
         title: l10n.transfers,
         icon: Icons.swap_horiz,
-        content: _buildTransfersTab(),
+        content: _buildTransfersTab(l10n),
         actions: [
           if (_controller.activeTransfers.isNotEmpty)
             IconButton(
@@ -593,11 +599,7 @@ class _P2LanTransferScreenState extends State<P2LanTransferScreen> {
 
     List<PanelInfo>? listPanels = isDesktop
         ? [tranferPanel, mainPanel, statusPanel]
-        : [
-            mainPanel,
-            tranferPanel,
-            statusPanel,
-          ];
+        : [mainPanel, tranferPanel, statusPanel];
 
     return ThreePanelsLayout(
       panelInfos: listPanels,
@@ -868,9 +870,22 @@ class _P2LanTransferScreenState extends State<P2LanTransferScreen> {
     );
   }
 
-  Widget _buildTransfersTab() {
+  Widget _buildTransfersTab(AppLocalizations l10n) {
     if (_controller.activeTransfers.isEmpty) {
-      return _buildEmptyTransfersState();
+      return Stack(
+        children: [
+          _buildEmptyTransfersState(),
+          Positioned(
+            right: 16,
+            bottom: 16,
+            child: FloatingActionButton(
+              onPressed: _toggleTransferFilterMode,
+              tooltip: _getFilterTooltip(l10n),
+              child: Icon(_getFilterIcon()),
+            ),
+          ),
+        ],
+      );
     }
 
     // Sort transfers by creation time (newest first)
@@ -878,9 +893,21 @@ class _P2LanTransferScreenState extends State<P2LanTransferScreen> {
         List<DataTransferTask>.from(_controller.activeTransfers)
           ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
+    // Apply filter based on selected mode
+    final filteredTransfers = sortedTransfers.where((t) {
+      switch (_transferFilterMode) {
+        case TransferFilterMode.all:
+          return true;
+        case TransferFilterMode.outgoing:
+          return t.isOutgoing;
+        case TransferFilterMode.incoming:
+          return !t.isOutgoing;
+      }
+    }).toList();
+
     // Group transfers by batch ID
     final groupedTransfers = <String?, List<DataTransferTask>>{};
-    for (final transfer in sortedTransfers) {
+    for (final transfer in filteredTransfers) {
       final batchId = transfer.batchId;
       groupedTransfers.putIfAbsent(batchId, () => []);
       groupedTransfers[batchId]!.add(transfer);
@@ -928,10 +955,25 @@ class _P2LanTransferScreenState extends State<P2LanTransferScreen> {
       );
     }
 
-    return ListView(
+    final content = ListView(
       controller: _transfersScrollController,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 80),
       children: batchWidgets,
+    );
+
+    return Stack(
+      children: [
+        content,
+        Positioned(
+          right: 16,
+          bottom: 16,
+          child: FloatingActionButton(
+            onPressed: _toggleTransferFilterMode,
+            tooltip: _getFilterTooltip(l10n),
+            child: Icon(_getFilterIcon()),
+          ),
+        ),
+      ],
     );
   }
 
@@ -2218,6 +2260,45 @@ class _P2LanTransferScreenState extends State<P2LanTransferScreen> {
 
     // Remove from expand states
     _batchExpandStates.remove(batchId);
+  }
+
+  // Transfer filter helpers
+  void _toggleTransferFilterMode() {
+    setState(() {
+      switch (_transferFilterMode) {
+        case TransferFilterMode.all:
+          _transferFilterMode = TransferFilterMode.outgoing;
+          break;
+        case TransferFilterMode.outgoing:
+          _transferFilterMode = TransferFilterMode.incoming;
+          break;
+        case TransferFilterMode.incoming:
+          _transferFilterMode = TransferFilterMode.all;
+          break;
+      }
+    });
+  }
+
+  IconData _getFilterIcon() {
+    switch (_transferFilterMode) {
+      case TransferFilterMode.all:
+        return Icons.swap_horiz;
+      case TransferFilterMode.outgoing:
+        return Icons.file_upload;
+      case TransferFilterMode.incoming:
+        return Icons.file_download;
+    }
+  }
+
+  String _getFilterTooltip(AppLocalizations l10n) {
+    switch (_transferFilterMode) {
+      case TransferFilterMode.all:
+        return l10n.transferStatusViewAll;
+      case TransferFilterMode.outgoing:
+        return l10n.transferStatusViewOutgoing;
+      case TransferFilterMode.incoming:
+        return l10n.transferStatusViewIncoming;
+    }
   }
 
   // Debug methods removed - using simple native device ID now

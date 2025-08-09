@@ -205,6 +205,8 @@ class P2PTransferSettingsData {
   final bool autoCleanupCancelledTasks; // Auto cleanup cancelled transfer tasks
   final bool autoCleanupFailedTasks; // Auto cleanup failed transfer tasks
   final int autoCleanupDelaySeconds; // Delay before auto cleanup (seconds)
+  final bool clearTransfersAtStartup; // Clear stale transfers at app startup
+  final bool autoCheckUpdatesDaily; // Check for app updates once per day
 
   P2PTransferSettingsData({
     this.downloadPath = '',
@@ -227,12 +229,14 @@ class P2PTransferSettingsData {
     this.compressionThreshold = 1.1, // Only compress if 10% or better reduction
     this.adaptiveCompression = false, // Disable adaptive compression by default
     this.autoCleanupCompletedTasks =
-        true, // Auto cleanup completed tasks by default
+        false, // Default: do not auto cleanup completed tasks
     this.autoCleanupCancelledTasks =
         true, // Auto cleanup cancelled tasks by default
     this.autoCleanupFailedTasks = true, // Auto cleanup failed tasks by default
     this.autoCleanupDelaySeconds =
         5, // Default 5 seconds delay for completed tasks
+    this.clearTransfersAtStartup = false, // Default: keep stale tasks
+    this.autoCheckUpdatesDaily = true, // Default: check updates daily
   });
 
   Map<String, dynamic> toJson() {
@@ -258,6 +262,8 @@ class P2PTransferSettingsData {
       'autoCleanupCancelledTasks': autoCleanupCancelledTasks,
       'autoCleanupFailedTasks': autoCleanupFailedTasks,
       'autoCleanupDelaySeconds': autoCleanupDelaySeconds,
+      'clearTransfersAtStartup': clearTransfersAtStartup,
+      'autoCheckUpdatesDaily': autoCheckUpdatesDaily,
     };
   }
 
@@ -285,10 +291,12 @@ class P2PTransferSettingsData {
           json['compressionAlgorithm'] ?? 'none', // Safe default
       compressionThreshold: (json['compressionThreshold'] as double?) ?? 1.1,
       adaptiveCompression: json['adaptiveCompression'] ?? false, // Safe default
-      autoCleanupCompletedTasks: json['autoCleanupCompletedTasks'] ?? true,
+      autoCleanupCompletedTasks: json['autoCleanupCompletedTasks'] ?? false,
       autoCleanupCancelledTasks: json['autoCleanupCancelledTasks'] ?? true,
       autoCleanupFailedTasks: json['autoCleanupFailedTasks'] ?? true,
       autoCleanupDelaySeconds: json['autoCleanupDelaySeconds'] ?? 5,
+      clearTransfersAtStartup: json['clearTransfersAtStartup'] ?? false,
+      autoCheckUpdatesDaily: json['autoCheckUpdatesDaily'] ?? true,
     );
   }
 
@@ -314,6 +322,8 @@ class P2PTransferSettingsData {
     bool? autoCleanupCancelledTasks,
     bool? autoCleanupFailedTasks,
     int? autoCleanupDelaySeconds,
+    bool? clearTransfersAtStartup,
+    bool? autoCheckUpdatesDaily,
   }) {
     return P2PTransferSettingsData(
       downloadPath: downloadPath ?? this.downloadPath,
@@ -342,6 +352,10 @@ class P2PTransferSettingsData {
           autoCleanupFailedTasks ?? this.autoCleanupFailedTasks,
       autoCleanupDelaySeconds:
           autoCleanupDelaySeconds ?? this.autoCleanupDelaySeconds,
+      clearTransfersAtStartup:
+          clearTransfersAtStartup ?? this.clearTransfersAtStartup,
+      autoCheckUpdatesDaily:
+          autoCheckUpdatesDaily ?? this.autoCheckUpdatesDaily,
     );
   }
 }

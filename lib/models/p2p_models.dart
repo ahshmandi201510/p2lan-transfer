@@ -730,6 +730,7 @@ class P2PDataTransferSettings {
   bool autoCleanupCancelledTasks; // Auto cleanup cancelled transfer tasks
   bool autoCleanupFailedTasks; // Auto cleanup failed transfer tasks
   int autoCleanupDelaySeconds; // Delay before auto cleanup (seconds)
+  bool clearTransfersAtStartup; // Clear stale transfers at app startup
 
   P2PDataTransferSettings({
     required this.downloadPath,
@@ -751,11 +752,12 @@ class P2PDataTransferSettings {
     this.compressionThreshold = 1.1, // Only compress if 10% or better reduction
     this.adaptiveCompression = true, // Use smart compression selection
     this.autoCleanupCompletedTasks =
-        true, // Auto cleanup completed tasks by default
+        false, // Auto cleanup completed tasks by default
     this.autoCleanupCancelledTasks =
         true, // Auto cleanup cancelled tasks by default
     this.autoCleanupFailedTasks = true, // Auto cleanup failed tasks by default
     this.autoCleanupDelaySeconds = 5, // Default 5 seconds delay
+    this.clearTransfersAtStartup = false,
   });
 
   // Helper getters for UI display
@@ -842,6 +844,7 @@ class P2PDataTransferSettings {
       'autoCleanupCancelledTasks': autoCleanupCancelledTasks,
       'autoCleanupFailedTasks': autoCleanupFailedTasks,
       'autoCleanupDelaySeconds': autoCleanupDelaySeconds,
+      'clearTransfersAtStartup': clearTransfersAtStartup,
     };
   }
 
@@ -873,10 +876,11 @@ class P2PDataTransferSettings {
       compressionAlgorithm: json['compressionAlgorithm'] ?? 'auto',
       compressionThreshold: (json['compressionThreshold'] as double?) ?? 1.1,
       adaptiveCompression: json['adaptiveCompression'] ?? true,
-      autoCleanupCompletedTasks: json['autoCleanupCompletedTasks'] ?? true,
+      autoCleanupCompletedTasks: json['autoCleanupCompletedTasks'] ?? false,
       autoCleanupCancelledTasks: json['autoCleanupCancelledTasks'] ?? true,
       autoCleanupFailedTasks: json['autoCleanupFailedTasks'] ?? true,
       autoCleanupDelaySeconds: json['autoCleanupDelaySeconds'] ?? 5,
+      clearTransfersAtStartup: json['clearTransfersAtStartup'] ?? false,
     );
   }
 }

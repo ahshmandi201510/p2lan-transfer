@@ -4,7 +4,6 @@ class SharedPreferencesKeys {
   static const String themeMode = 'themeMode';
   static const String language = 'language';
   static const String interface = 'interface';
-  static const String tools = 'tools';
   static const String data = 'data';
   static const String about = 'about';
 
@@ -14,5 +13,6 @@ class SharedPreferencesKeys {
   static const String p2pNetworkSpeed = 'p2p_network_speed';
   static const String p2pAdvanced = 'p2p_advanced';
 
-  static const String bookmarkCollection = 'bookmarkCollection';
+  // App update check
+  static const String lastUpdateCheckEpochMs = 'last_update_check_epoch_ms';
 }

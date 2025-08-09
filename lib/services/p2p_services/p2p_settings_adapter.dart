@@ -33,6 +33,7 @@ class P2PSettingsAdapter {
       autoCleanupCancelledTasks: newSettings.autoCleanupCancelledTasks,
       autoCleanupFailedTasks: newSettings.autoCleanupFailedTasks,
       autoCleanupDelaySeconds: newSettings.autoCleanupDelaySeconds,
+      clearTransfersAtStartup: newSettings.clearTransfersAtStartup,
     );
   }
 
@@ -61,6 +62,7 @@ class P2PSettingsAdapter {
       autoCleanupCancelledTasks: oldSettings.autoCleanupCancelledTasks,
       autoCleanupFailedTasks: oldSettings.autoCleanupFailedTasks,
       autoCleanupDelaySeconds: oldSettings.autoCleanupDelaySeconds,
+      clearTransfersAtStartup: oldSettings.clearTransfersAtStartup,
     );
   }
 

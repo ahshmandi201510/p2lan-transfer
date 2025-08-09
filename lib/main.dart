@@ -10,6 +10,8 @@ import 'package:p2lantransfer/services/app_logger.dart';
 import 'package:p2lantransfer/services/app_installation_service.dart';
 import 'package:p2lantransfer/services/p2p_services/p2p_notification_service.dart';
 import 'package:p2lantransfer/services/p2p_services/p2p_service_manager.dart';
+import 'package:p2lantransfer/utils/date_utils.dart';
+import 'package:p2lantransfer/utils/network_utils.dart';
 import 'package:p2lantransfer/utils/snackbar_utils.dart';
 import 'package:p2lantransfer/variables.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,9 +19,17 @@ import 'package:window_manager/window_manager.dart';
 import 'package:flutter/services.dart';
 import 'package:workmanager/workmanager.dart';
 import 'dart:io';
+import 'package:p2lantransfer/services/version_check_service.dart';
+import 'package:p2lantransfer/services/shared_preferences_service.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
 
 // Global navigation key for deep linking
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+// App boot completion notifier for showing a loading screen during init
+final ValueNotifier<bool> bootCompletedNotifier = ValueNotifier<bool>(false);
 
 // --- Workmanager Setup ---
 @pragma(
@@ -189,6 +199,11 @@ void _initializeServicesInBackground() {
       await AppLogger.instance.initialize();
       logDebug('AppLogger initialized');
 
+      // Log SharedPreferences storage location for debugging
+      if (kDebugMode) {
+        await _logSharedPreferencesLocation();
+      }
+
       // UnifiedRandomStateService is initialized on demand now
       // await UnifiedRandomStateService.initialize();
 
@@ -207,6 +222,9 @@ void _initializeServicesInBackground() {
       await P2PServiceManager.init();
       logDebug('P2PServiceManager initialized');
 
+      // Auto check for new version once per day (if enabled)
+      await _maybeCheckForUpdatesDaily();
+
       // Clear all pairing requests on app startup
       try {
         final p2pManager = P2PServiceManager.instance;
@@ -217,11 +235,114 @@ void _initializeServicesInBackground() {
       }
 
       logInfo('All background services initialized successfully');
+      // Mark boot completed so UI can leave the loading screen
+      bootCompletedNotifier.value = true;
     } catch (e) {
       // Log initialization errors but continue
       logError('Error during background service initialization', e);
+      // Avoid keeping users on loading screen forever
+      bootCompletedNotifier.value = true;
     }
   });
+}
+
+Future<void> _maybeCheckForUpdatesDaily() async {
+  try {
+    final settings = await ExtensibleSettingsService.getP2PTransferSettings();
+    if (!settings.autoCheckUpdatesDaily) return;
+
+    final prefs = await SharedPreferences.getInstance();
+    final lastMs = prefs.getInt(SharedPreferencesKeys.lastUpdateCheckEpochMs);
+    final lastFetch = lastMs != null
+        ? DateTime.fromMillisecondsSinceEpoch(lastMs)
+        : DateTime.now();
+    if (MyDateUtils.isToday(lastFetch)) {
+      return;
+    }
+
+    final ctx = navigatorKey.currentContext;
+    if (ctx == null) return;
+
+    if (!await NetworkUtils.isNetworkAvailable()) {
+      if (ctx.mounted) {
+        SnackbarUtils.showTyped(
+          ctx,
+          AppLocalizations.of(ctx)!.noInternetToFetchNewUpdate,
+          SnackBarType.warning,
+        );
+      }
+      return;
+    }
+
+    final latest = await VersionCheckService.fetchLatestRelease();
+    if (latest != null) {
+      final pkg = await PackageInfo.fromPlatform();
+      final isNewer =
+          VersionCheckService.compareVersions(pkg.version, latest.tag) < 0;
+      if (isNewer) {
+        if (ctx.mounted) {
+          VersionCheckService.showNewVersionAvailableDialog(ctx, latest);
+        } else {
+          // Retry shortly if UI not ready yet
+          Future.delayed(const Duration(seconds: 2), () {
+            final retryCtx = navigatorKey.currentContext;
+            if (retryCtx != null && retryCtx.mounted) {
+              VersionCheckService.showNewVersionAvailableDialog(
+                  retryCtx, latest);
+            }
+          });
+        }
+      }
+    }
+
+    await prefs.setInt(SharedPreferencesKeys.lastUpdateCheckEpochMs,
+        DateTime.now().millisecondsSinceEpoch);
+  } catch (e) {
+    // ignore
+  }
+}
+
+Future<void> _logSharedPreferencesLocation() async {
+  try {
+    if (kIsWeb) {
+      logDebug('SharedPreferences storage: Web LocalStorage');
+      return;
+    }
+
+    if (Platform.isAndroid) {
+      final pkg = await PackageInfo.fromPlatform();
+      final path =
+          '/data/data/${pkg.packageName}/shared_prefs/${pkg.packageName}_preferences.xml';
+      logDebug('SharedPreferences file (Android): $path');
+      return;
+    }
+
+    if (Platform.isIOS) {
+      final pkg = await PackageInfo.fromPlatform();
+      logDebug(
+          'SharedPreferences (iOS): NSUserDefaults for bundle ${pkg.packageName}');
+      return;
+    }
+
+    if (Platform.isMacOS) {
+      final pkg = await PackageInfo.fromPlatform();
+      logDebug(
+          'SharedPreferences (macOS): NSUserDefaults for bundle ${pkg.packageName}');
+      return;
+    }
+
+    if (Platform.isWindows || Platform.isLinux) {
+      final dir = await getApplicationSupportDirectory();
+      final filePath = p.join(dir.path, 'shared_preferences.json');
+      logDebug('SharedPreferences file: $filePath');
+      return;
+    }
+
+    final dir = await getApplicationSupportDirectory();
+    logDebug('SharedPreferences dir (unknown platform): ${dir.path}');
+  } catch (e) {
+    logError('Failed to determine SharedPreferences location', e);
+  }
 }
 
 class SettingsController extends ChangeNotifier {
@@ -337,51 +458,61 @@ class _MainAppState extends State<MainApp> with WidgetsBindingObserver {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          home: PopScope(
-            canPop: false, // Prevent default pop behavior
-            onPopInvokedWithResult: (bool didPop, dynamic result) async {
-              if (didPop) return; // If already popped, don't do anything
-
-              // Check if we're on the root screen (home screen)
-              final navigator = navigatorKey.currentState;
-              if (navigator == null || !navigator.canPop()) {
-                // On root screen - implement double back to exit
-                final now = DateTime.now();
-                if (_lastBackPressed == null ||
-                    now.difference(_lastBackPressed!) >
-                        const Duration(seconds: 3)) {
-                  _lastBackPressed = now;
-                  // Show snackbar using scaffold messenger
-                  final currentContext = navigatorKey.currentContext;
-                  if (currentContext != null) {
-                    final loc = AppLocalizations.of(currentContext)!;
-                    SnackbarUtils.showTyped(currentContext,
-                        loc.pressBackAgainToExit, SnackBarType.info);
-                  }
-                  return; // Don't pop
-                }
-
-                // Back again within 3 seconds to exit
-                if (Platform.isAndroid) {
-                  SystemNavigator.pop();
-                } else if (Platform.isWindows) {
-                  await windowManager.destroy();
-                }
-                // Other platforms will implement their own exit logic in the future
-              } else {
-                // Not on root screen - allow normal back navigation
-                navigator.pop();
+          home: ValueListenableBuilder<bool>(
+            valueListenable: bootCompletedNotifier,
+            builder: (context, bootDone, __) {
+              // Show a simple branded loading screen until boot completed
+              if (!bootDone && !_isFirstTimeSetup) {
+                return const _AppLoadingScreen();
               }
+
+              return PopScope(
+                canPop: false, // Prevent default pop behavior
+                onPopInvokedWithResult: (bool didPop, dynamic result) async {
+                  if (didPop) return; // If already popped, don't do anything
+
+                  // Check if we're on the root screen (home screen)
+                  final navigator = navigatorKey.currentState;
+                  if (navigator == null || !navigator.canPop()) {
+                    // On root screen - implement double back to exit
+                    final now = DateTime.now();
+                    if (_lastBackPressed == null ||
+                        now.difference(_lastBackPressed!) >
+                            const Duration(seconds: 3)) {
+                      _lastBackPressed = now;
+                      // Show snackbar using scaffold messenger
+                      final currentContext = navigatorKey.currentContext;
+                      if (currentContext != null) {
+                        final loc = AppLocalizations.of(currentContext)!;
+                        SnackbarUtils.showTyped(currentContext,
+                            loc.pressBackAgainToExit, SnackBarType.info);
+                      }
+                      return; // Don't pop
+                    }
+
+                    // Back again within 3 seconds to exit
+                    if (Platform.isAndroid) {
+                      SystemNavigator.pop();
+                    } else if (Platform.isWindows) {
+                      await windowManager.destroy();
+                    }
+                    // Other platforms will implement their own exit logic in the future
+                  } else {
+                    // Not on root screen - allow normal back navigation
+                    navigator.pop();
+                  }
+                },
+                child: _isFirstTimeSetup
+                    ? const AppSetupScreen()
+                    : P2LanTransferScreen(
+                        isEmbedded: false,
+                        onToolSelected: (Widget tool, String toolType,
+                            {IconData? icon, String? parentCategory}) {
+                          // Implement your logic here or leave empty if not needed
+                        },
+                      ),
+              );
             },
-            child: _isFirstTimeSetup
-                ? const AppSetupScreen()
-                : P2LanTransferScreen(
-                    isEmbedded: false,
-                    onToolSelected: (Widget tool, String toolType,
-                        {IconData? icon, String? parentCategory}) {
-                      // Implement your logic here or leave empty if not needed
-                    },
-                  ),
           ),
           routes: const {
             // Routes removed - navigation handled by profile tabs
@@ -391,6 +522,50 @@ class _MainAppState extends State<MainApp> with WidgetsBindingObserver {
           ],
         );
       },
+    );
+  }
+}
+
+class _AppLoadingScreen extends StatelessWidget {
+  const _AppLoadingScreen();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 96,
+              height: 96,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: theme.colorScheme.primary.withValues(alpha: 0.08),
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: Image.asset(
+                appAssetIcon,
+                fit: BoxFit.cover,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              appName,
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 16),
+            const SizedBox(
+              width: 28,
+              height: 28,
+              child: CircularProgressIndicator(strokeWidth: 3),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -7,6 +7,7 @@ import 'package:p2lantransfer/utils/size_utils.dart';
 import 'package:p2lantransfer/utils/url_utils.dart';
 import 'package:p2lantransfer/utils/widget_layout_render_helper.dart';
 import 'package:p2lantransfer/widgets/generic/generic_dialog.dart';
+import 'package:p2lantransfer/variables.dart';
 
 class DataTransferProgressWidget extends StatelessWidget {
   final DataTransferTask task;
@@ -178,14 +179,20 @@ class DataTransferProgressWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    task.fileName,
-                    style: TextStyle(
-                      fontWeight:
-                          isCompact ? FontWeight.normal : FontWeight.bold,
-                      fontSize: isCompact ? 14 : 16,
-                    ),
-                    overflow: TextOverflow.ellipsis,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          task.fileName,
+                          style: TextStyle(
+                            fontWeight:
+                                isCompact ? FontWeight.normal : FontWeight.bold,
+                            fontSize: isCompact ? 14 : 16,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
                   if (!isCompact)
                     Text(
@@ -223,13 +230,25 @@ class DataTransferProgressWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    _getStatusText(l10n),
-                    style: TextStyle(
-                      color: _getStatusColor(),
-                      fontWeight: FontWeight.w500,
-                      fontSize: isCompact ? 12 : 14,
-                    ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (!isInBatch) ...[
+                        _buildDirectionIcon(context),
+                        const SizedBox(width: 6),
+                      ],
+                      Flexible(
+                        child: Text(
+                          _getStatusText(l10n),
+                          style: TextStyle(
+                            color: _getStatusColor(),
+                            fontWeight: FontWeight.w500,
+                            fontSize: isCompact ? 12 : 14,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
                   if (task.status == DataTransferStatus.transferring)
                     Text(
@@ -275,7 +294,7 @@ class DataTransferProgressWidget extends StatelessWidget {
             (task.startedAt != null || task.completedAt != null)) ...[
           const SizedBox(height: 8),
           Text(
-            _getTimeInfo(),
+            _getTimeInfo(l10n),
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Colors.grey[600],
                 ),
@@ -602,21 +621,21 @@ class DataTransferProgressWidget extends StatelessWidget {
     return '${_formatFileSize(bytesPerSecond.round())}/s';
   }
 
-  String _getTimeInfo() {
+  String _getTimeInfo(AppLocalizations loc) {
     if (task.status == DataTransferStatus.cancelled ||
         task.status == DataTransferStatus.failed) {
-      return 'Đã dừng';
+      return loc.stopped;
     }
     if (task.completedAt != null) {
       final duration =
           task.completedAt!.difference(task.startedAt ?? task.createdAt);
-      return 'Hoàn thành trong ${_formatDuration(duration)}';
+      return loc.completedInTime(_formatDuration(duration));
     } else if (task.startedAt != null) {
       final elapsed = DateTime.now().difference(task.startedAt!);
-      return 'Đã truyền ${_formatDuration(elapsed)}';
+      return loc.transferredInTime(_formatDuration(elapsed));
     } else {
       final waiting = DateTime.now().difference(task.createdAt);
-      return 'Chờ ${_formatDuration(waiting)}';
+      return loc.waitingInTime(_formatDuration(waiting));
     }
   }
 
@@ -637,5 +656,21 @@ class DataTransferProgressWidget extends StatelessWidget {
     } else {
       return '${duration.inHours}h ${duration.inMinutes % 60}m';
     }
+  }
+
+  // Direction visuals
+  Color _directionColor() => task.isOutgoing ? sendColor : receiveColor;
+
+  IconData _directionIcon() =>
+      task.isOutgoing ? Icons.file_upload : Icons.file_download;
+
+  Widget _buildDirectionIcon(BuildContext context) {
+    final color = _directionColor();
+    final l10n = AppLocalizations.of(context)!;
+    final label = task.isOutgoing ? l10n.sending : l10n.receiving;
+    return Tooltip(
+      message: label,
+      child: Icon(_directionIcon(), size: 16, color: color),
+    );
   }
 }

@@ -3,7 +3,10 @@ import 'package:p2lantransfer/l10n/app_localizations.dart';
 import 'package:p2lantransfer/library_list.dart';
 import 'package:p2lantransfer/screens/terms_of_use_screen.dart';
 import 'package:p2lantransfer/screens/donors_acknowledgment_screen.dart';
+import 'package:p2lantransfer/services/author_products_service.dart';
 import 'package:p2lantransfer/services/version_check_service.dart';
+import 'package:p2lantransfer/utils/network_utils.dart';
+import 'package:p2lantransfer/utils/snackbar_utils.dart';
 import 'package:p2lantransfer/utils/url_utils.dart';
 import 'package:p2lantransfer/utils/variables_utils.dart';
 import 'package:p2lantransfer/widgets/generic/generic_settings_helper.dart';
@@ -151,8 +154,29 @@ class _AboutLayoutState extends State<AboutLayout> {
             title: Text(l10n.checkForNewVersion),
             subtitle: Text(l10n.checkForNewVersionDesc),
             trailing: const Icon(Icons.arrow_forward_ios),
+            onTap: () async {
+              if (await NetworkUtils.isNetworkAvailable() && context.mounted) {
+                VersionCheckService.showVersionDialog(context);
+              } else {
+                SnackbarUtils.showTyped(
+                    context,
+                    l10n.noInternetPleaseConnectAndTryAgain,
+                    SnackBarType.warning);
+              }
+            },
+          ),
+
+          // View author's products section
+          ListTile(
+            leading: const Icon(
+              Icons.shopping_bag,
+              color: Colors.green,
+            ),
+            title: Text(l10n.authorProducts),
+            subtitle: Text(l10n.authorProductsDesc),
+            trailing: const Icon(Icons.arrow_forward_ios),
             onTap: () {
-              VersionCheckService.showVersionDialog(context);
+              AuthorProductsService.navigateToAuthorProductsScreen(context);
             },
           ),
         ],

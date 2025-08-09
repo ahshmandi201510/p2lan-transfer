@@ -202,6 +202,11 @@ List<Map<String, String>> libraryList = [
     'author': 'Jonny Borges',
     'license': 'MIT',
   },
+  {
+    'name': 'cached_network_image',
+    'author': 'Reza Pahlevi',
+    'license': 'MIT',
+  },
 
   // File Operations & Sharing
   {

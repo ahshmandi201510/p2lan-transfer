@@ -1,5 +1,5 @@
 // ===== CONFIGURATION & LINKS MANAGEMENT =====
-const version = '1.0.2'; // Define the version here for easy reference
+const version = '1.1.0'; // Define the version here for easy reference
 
 const AppConfig = {
     // ===== EXTERNAL LINKS =====

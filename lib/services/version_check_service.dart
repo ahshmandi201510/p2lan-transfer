@@ -28,8 +28,7 @@ class ReleaseAsset {
       name: json['name'] ?? '',
       size: json['size'] ?? 0,
       browserDownloadUrl: json['browser_download_url'] ?? '',
-      updatedAt: DateTime.parse(
-          json['updated_at'] ?? DateTime.now().toIso8601String()),
+      updatedAt: DateTime.parse(json['updated_at']),
     );
   }
 
@@ -63,8 +62,7 @@ class ReleaseInfo {
       name: json['name'],
       tag: json['tag_name'],
       body: json['body'],
-      publishedAt: DateTime.parse(
-          json['published_at'] ?? DateTime.now().toIso8601String()),
+      publishedAt: DateTime.parse(json['published_at']).toLocal(),
       assets: assetsList,
     );
   }
@@ -101,13 +99,13 @@ class VersionCheckService {
 
       if (releaseInfo == null) return true;
 
-      return _compareVersions(currentVersion, releaseInfo.tag) >= 0;
+      return compareVersions(currentVersion, releaseInfo.tag) >= 0;
     } catch (e) {
       return true; // If we can't check, assume it's latest to avoid false positives
     }
   }
 
-  static int _compareVersions(String version1, String version2) {
+  static int compareVersions(String version1, String version2) {
     // Remove 'v' prefix if present
     final v1 = version1.startsWith('v') ? version1.substring(1) : version1;
     final v2 = version2.startsWith('v') ? version2.substring(1) : version2;
@@ -158,7 +156,7 @@ class VersionCheckService {
 
         if (releaseInfo != null) {
           final isLatest =
-              _compareVersions(packageInfo.version, releaseInfo.tag) >= 0;
+              compareVersions(packageInfo.version, releaseInfo.tag) >= 0;
           _showReleaseInfoDialog(context, releaseInfo, packageInfo, isLatest);
         } else {
           _showErrorDialog(context, loc.noNewUpdates);
@@ -169,6 +167,15 @@ class VersionCheckService {
         Navigator.of(context).pop(); // Close loading dialog
         _showErrorDialog(context, loc.updateCheckError(e.toString()));
       }
+    }
+  }
+
+  // Show dialog for new version available, only used for new version available
+  static void showNewVersionAvailableDialog(
+      BuildContext context, ReleaseInfo latestReleaseInfo) async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    if (context.mounted) {
+      _showReleaseInfoDialog(context, latestReleaseInfo, packageInfo, false);
     }
   }
 

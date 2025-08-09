@@ -1117,6 +1117,18 @@ class AppLocalizationsEn extends AppLocalizations {
       'P2P networking is paused due to internet connection loss. It will automatically resume when connection is restored.';
 
   @override
+  String get internetRequiredToViewThisPage =>
+      'Please connect to the internet to view this page';
+
+  @override
+  String get noInternetPleaseConnectAndTryAgain =>
+      'No internet connection. Please connect and try again.';
+
+  @override
+  String get noInternetToFetchNewUpdate =>
+      'No internet connection to fetch new update. Please connect and try again.';
+
+  @override
   String get noDevicesInRange => 'No devices in range. Try refreshing.';
 
   @override
@@ -2061,6 +2073,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cleanupDelay => 'Cleanup delay';
 
   @override
+  String get autoCheckUpdatesDaily => 'Auto check for updates';
+
+  @override
+  String get autoCheckUpdatesDailyDesc =>
+      'Check for updates once a day and notify when a new version is available';
+
+  @override
+  String get clearTransfersAtStartup => 'Clear transfers at startup';
+
+  @override
+  String get clearTransfersAtStartupDesc =>
+      'Automatically clear old transfer progress when the app starts';
+
+  @override
   String get notificationRequestPermission => 'Request Notification Permission';
 
   @override
@@ -2143,4 +2169,62 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get eerror => 'Error';
+
+  @override
+  String get stopped => 'Stopped';
+
+  @override
+  String completedInTime(String duration) {
+    return 'Completed in $duration';
+  }
+
+  @override
+  String transferredInTime(String duration) {
+    return 'Transferred in $duration';
+  }
+
+  @override
+  String waitingInTime(String duration) {
+    return 'Waiting for $duration';
+  }
+
+  @override
+  String get transferStatusViewAll => 'View: All';
+
+  @override
+  String get transferStatusViewOutgoing => 'View: Only outgoing';
+
+  @override
+  String get transferStatusViewIncoming => 'View: Only incoming';
+
+  @override
+  String get authorProducts => 'Other Products';
+
+  @override
+  String get authorProductsDesc =>
+      'View other products by the author, maybe you\'ll find something interesting!';
+
+  @override
+  String get authorProductsMessage =>
+      'Hi there! Here are some of my other products. If you\'re interested, feel free to check them out! I hope you\'ll find something useful among them. Thank you for visiting!';
+
+  @override
+  String get noOtherProducts => 'No other products available';
+
+  @override
+  String get loadingProducts => 'Loading products...';
+
+  @override
+  String get failedToLoadProducts => 'Failed to load products';
+
+  @override
+  String get retryLoadProducts => 'Retry loading products';
+
+  @override
+  String get visitProduct => 'Visit Product';
+
+  @override
+  String productCount(int count) {
+    return '$count product(s)';
+  }
 }

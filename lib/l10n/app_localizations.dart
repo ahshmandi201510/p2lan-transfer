@@ -63,7 +63,7 @@ import 'app_localizations_vi.dart';
 /// property.
 abstract class AppLocalizations {
   AppLocalizations(String locale)
-      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -86,16 +86,16 @@ abstract class AppLocalizations {
   /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
-    Locale('vi')
+    Locale('vi'),
   ];
 
   /// No description provided for @title.
@@ -2168,6 +2168,24 @@ abstract class AppLocalizations {
   /// **'P2P networking is paused due to internet connection loss. It will automatically resume when connection is restored.'**
   String get p2pNetworkingPaused;
 
+  /// No description provided for @internetRequiredToViewThisPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please connect to the internet to view this page'**
+  String get internetRequiredToViewThisPage;
+
+  /// No description provided for @noInternetPleaseConnectAndTryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection. Please connect and try again.'**
+  String get noInternetPleaseConnectAndTryAgain;
+
+  /// No description provided for @noInternetToFetchNewUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection to fetch new update. Please connect and try again.'**
+  String get noInternetToFetchNewUpdate;
+
   /// No description provided for @noDevicesInRange.
   ///
   /// In en, this message translates to:
@@ -3884,6 +3902,30 @@ abstract class AppLocalizations {
   /// **'Cleanup delay'**
   String get cleanupDelay;
 
+  /// Toggle to automatically check for app updates once per day
+  ///
+  /// In en, this message translates to:
+  /// **'Auto check for updates'**
+  String get autoCheckUpdatesDaily;
+
+  /// Description for daily update check
+  ///
+  /// In en, this message translates to:
+  /// **'Check for updates once a day and notify when a new version is available'**
+  String get autoCheckUpdatesDailyDesc;
+
+  /// Setting label to clear old transfer items on app startup
+  ///
+  /// In en, this message translates to:
+  /// **'Clear transfers at startup'**
+  String get clearTransfersAtStartup;
+
+  /// Setting description for startup cleanup of transfer progress
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically clear old transfer progress when the app starts'**
+  String get clearTransfersAtStartupDesc;
+
   /// No description provided for @notificationRequestPermission.
   ///
   /// In en, this message translates to:
@@ -4021,6 +4063,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error'**
   String get eerror;
+
+  /// No description provided for @stopped.
+  ///
+  /// In en, this message translates to:
+  /// **'Stopped'**
+  String get stopped;
+
+  /// No description provided for @completedInTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed in {duration}'**
+  String completedInTime(String duration);
+
+  /// No description provided for @transferredInTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Transferred in {duration}'**
+  String transferredInTime(String duration);
+
+  /// No description provided for @waitingInTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for {duration}'**
+  String waitingInTime(String duration);
+
+  /// No description provided for @transferStatusViewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'View: All'**
+  String get transferStatusViewAll;
+
+  /// No description provided for @transferStatusViewOutgoing.
+  ///
+  /// In en, this message translates to:
+  /// **'View: Only outgoing'**
+  String get transferStatusViewOutgoing;
+
+  /// No description provided for @transferStatusViewIncoming.
+  ///
+  /// In en, this message translates to:
+  /// **'View: Only incoming'**
+  String get transferStatusViewIncoming;
+
+  /// No description provided for @authorProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'Other Products'**
+  String get authorProducts;
+
+  /// No description provided for @authorProductsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'View other products by the author, maybe you\'ll find something interesting!'**
+  String get authorProductsDesc;
+
+  /// No description provided for @authorProductsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Hi there! Here are some of my other products. If you\'re interested, feel free to check them out! I hope you\'ll find something useful among them. Thank you for visiting!'**
+  String get authorProductsMessage;
+
+  /// No description provided for @noOtherProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'No other products available'**
+  String get noOtherProducts;
+
+  /// No description provided for @loadingProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading products...'**
+  String get loadingProducts;
+
+  /// No description provided for @failedToLoadProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load products'**
+  String get failedToLoadProducts;
+
+  /// No description provided for @retryLoadProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry loading products'**
+  String get retryLoadProducts;
+
+  /// No description provided for @visitProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Visit Product'**
+  String get visitProduct;
+
+  /// No description provided for @productCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} product(s)'**
+  String productCount(int count);
 }
 
 class _AppLocalizationsDelegate
@@ -4050,8 +4188,9 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   }
 
   throw FlutterError(
-      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-      'an issue with the localizations generation tool. Please file an issue '
-      'on GitHub with a reproducible sample app and the gen-l10n configuration '
-      'that was used.');
+    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'an issue with the localizations generation tool. Please file an issue '
+    'on GitHub with a reproducible sample app and the gen-l10n configuration '
+    'that was used.',
+  );
 }

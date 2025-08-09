@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -126,12 +125,64 @@ class P2PTransferService extends ChangeNotifier {
     _networkService.setMessageHandler(_handleTcpMessage);
   }
 
+  // -- Persistence helpers -------------------------------------------------
+  Future<void> _saveTaskToDb(DataTransferTask task) async {
+    try {
+      final isar = IsarService.isar;
+      await isar.writeTxn(() => isar.dataTransferTasks.put(task));
+    } catch (e) {
+      logWarning('P2PTransferService: Failed to persist task ${task.id}: $e');
+    }
+  }
+
+  Future<void> _deleteTaskFromDbById(String taskId) async {
+    try {
+      final isar = IsarService.isar;
+      await isar
+          .writeTxn(() => isar.dataTransferTasks.delete(fastHash(taskId)));
+    } catch (e) {
+      logWarning(
+          'P2PTransferService: Failed to delete task $taskId from DB: $e');
+    }
+  }
+
   /// Initialize transfer service
   Future<void> initialize() async {
     // Load transfer settings and active transfers
     await _loadTransferSettings();
     await _loadActiveTransfers();
     await _loadPendingFileTransferRequests();
+
+    // Optional: clear stale transfers on startup based on settings
+    try {
+      final doStartupClear = _transferSettings?.clearTransfersAtStartup == true;
+      if (doStartupClear && _activeTransfers.isNotEmpty) {
+        // Clear all tasks
+        logDebug(
+            'P2PTransferService: Startup cleanup: ${_activeTransfers.length} all transfers');
+        // Add active transfer
+        final idsToClear = _activeTransfers.values.map((t) => t.id).toList();
+        // Clear all tasks
+        for (final id in idsToClear) {
+          await _autoCleanupTask(id, 'startup cleanup');
+        }
+      } else {
+        // Only clear tasks that are not successful
+        logDebug(
+            'P2PTransferService: Startup cleanup: ${_activeTransfers.length} unsuccessful transfers');
+        // Add active transfer
+        final idsToClear = _activeTransfers.values
+            .where((t) => t.status != DataTransferStatus.completed)
+            .map((t) => t.id)
+            .toList();
+        // Clear all tasks
+        for (final id in idsToClear) {
+          await _autoCleanupTask(id, 'startup cleanup');
+        }
+      }
+    } catch (e) {
+      logWarning('P2PTransferService: Startup cleanup failed: $e');
+    }
 
     // Initialize Android path if needed
     await _initializeAndroidPath();
@@ -232,6 +283,7 @@ class P2PTransferService extends ChangeNotifier {
             batchId: request.batchId,
             data: taskData);
         _activeTransfers[task.id] = task;
+        await _saveTaskToDb(task);
         logDebug(
             'P2PTransferService: Created task ${task.id} for file ${fileInfo.fileName} '
             'transferOnly=$transferOnly with data: ${task.data.toString()}');
@@ -303,8 +355,8 @@ class P2PTransferService extends ChangeNotifier {
         Timer(
             Duration(seconds: _transferSettings?.autoCleanupDelaySeconds ?? 3),
             () async {
-          // logDebug(
-          //     '>> Call auto cleanup from autoCleanupCancelledTasks == true for failed task: ${task.id}');
+          logDebug(
+              '>> Call auto cleanup from autoCleanupCancelledTasks == true for failed task: ${task.id}');
 
           await _autoCleanupTask(taskId, 'cancelled');
         });
@@ -402,6 +454,8 @@ class P2PTransferService extends ChangeNotifier {
         _cleanupTempFile(tempFilePath);
       }
       logInfo('P2PTransferService: Cleared transfer: ${task.fileName}');
+      // Remove from DB as well
+      _deleteTaskFromDbById(taskId);
       notifyListeners();
     }
   }
@@ -441,6 +495,8 @@ class P2PTransferService extends ChangeNotifier {
     // Trigger memory cleanup
     Future.microtask(() => _cleanupMemory());
 
+    // Remove from DB
+    await _deleteTaskFromDbById(taskId);
     notifyListeners();
     return true;
   }
@@ -459,6 +515,17 @@ class P2PTransferService extends ChangeNotifier {
         task.status = DataTransferStatus.cancelled;
         task.errorMessage = 'Transfer cancelled during network stop';
         _cleanupTransfer(taskId);
+        await _saveTaskToDb(task);
+        if (_transferSettings?.autoCleanupCancelledTasks == true) {
+          Timer(
+              Duration(
+                  seconds: _transferSettings?.autoCleanupDelaySeconds ?? 5),
+              () async {
+            logDebug(
+                '>> Auto cleanup (cancelAllTransfers) scheduled for task: ${task.id}');
+            await _autoCleanupTask(taskId, 'cancelled by stop');
+          });
+        }
       }
     }
   }
@@ -641,6 +708,17 @@ class P2PTransferService extends ChangeNotifier {
           task.status = DataTransferStatus.rejected;
           task.errorMessage = response.rejectMessage ?? 'Transfer rejected';
           _cleanupTransfer(task.id);
+          // Only auto-cleanup on sender side for cancelled/rejected tasks
+          if (_transferSettings?.autoCleanupCancelledTasks == true) {
+            Timer(
+                Duration(
+                    seconds: _transferSettings?.autoCleanupDelaySeconds ?? 5),
+                () async {
+              logDebug(
+                  '>> Auto cleanup (rejected) scheduled for task: ${task.id}');
+              await _autoCleanupTask(task.id, 'rejected');
+            });
+          }
         }
       }
 
@@ -739,12 +817,13 @@ class P2PTransferService extends ChangeNotifier {
         return;
       }
 
-      // Initialize chunks list
+      // Initialize chunks list and guard against out-of-order duplicates
       _incomingFileChunks.putIfAbsent(taskId, () => []);
       _incomingFileChunks[taskId]!.add(chunkData);
 
       // For large files, periodically flush chunks to temporary file to reduce memory usage
-      const int maxChunksInMemory = 50; // Limit chunks in memory
+      const int maxChunksInMemory =
+          25; // Lower threshold to reduce memory buildup
       if (_incomingFileChunks[taskId]!.length >= maxChunksInMemory) {
         await _flushChunksToTempFile(taskId);
       }
@@ -764,9 +843,8 @@ class P2PTransferService extends ChangeNotifier {
       }
 
       final progressPercent = (task.fileSize > 0)
-          ? ((task.transferredBytes / task.fileSize) * 100)
+          ? (((task.transferredBytes / task.fileSize) * 100).clamp(0.0, 100.0))
               .round()
-              .clamp(0, 100)
           : 0;
 
       // Show progress notification
@@ -813,6 +891,14 @@ class P2PTransferService extends ChangeNotifier {
             'P2PTransferService: Last chunk received for task $taskId, assembling file...');
         await _assembleReceivedFile(
             taskId: taskId, metaData: {"userId": message.fromUserId});
+      } else {
+        // Safety: if received bytes already meet/exceed fileSize, assemble proactively
+        if (task.transferredBytes >= task.fileSize && task.fileSize > 0) {
+          logWarning(
+              'P2PTransferService: transferredBytes>=fileSize without isLast. Forcing assemble for task $taskId');
+          await _assembleReceivedFile(
+              taskId: taskId, metaData: {"userId": message.fromUserId});
+        }
       }
     } catch (e) {
       logError(
@@ -845,7 +931,10 @@ class P2PTransferService extends ChangeNotifier {
       task.status = DataTransferStatus.cancelled;
       task.errorMessage = 'Transfer cancelled by sender';
       _cleanupTransfer(taskId);
+      await _saveTaskToDb(task);
       notifyListeners();
+      // Only auto-cleanup on receiver side? Requirement says: cancelled -> cleanup on sender.
+      // So do NOT auto-cleanup here (receiver side). Let sender side handle cleanup.
     }
   }
 
@@ -947,6 +1036,7 @@ class P2PTransferService extends ChangeNotifier {
         );
 
         _activeTransfers[taskId] = task;
+        await _saveTaskToDb(task);
 
         // Process buffered chunks
         final bufferedChunks = _pendingChunks.remove(taskId);
@@ -1113,14 +1203,17 @@ class P2PTransferService extends ChangeNotifier {
 
       logDebug('Check data transfer task: ${task.data}');
 
-      // Auto-cleanup completed task after a delay (keep for a short time to allow user interaction)
-      if (_transferSettings?.autoCleanupCompletedTasks == true) {
+      // Persist task update to DB
+      await _saveTaskToDb(task);
+
+      // Auto-cleanup for completed task only on receiver side (task.isOutgoing == false)
+      if (!task.isOutgoing &&
+          _transferSettings?.autoCleanupCompletedTasks == true) {
         Timer(
             Duration(seconds: _transferSettings?.autoCleanupDelaySeconds ?? 5),
             () async {
-          // logDebug(
-          //     '>> Call auto cleanup from autoCleanupCompletedTasks == true for failed task: ${task.id}');
-
+          logDebug(
+              '>> Auto cleanup (completed, receiver) scheduled for task: ${task.id}');
           await _autoCleanupTask(taskId, 'completed');
         });
       }
@@ -1237,6 +1330,17 @@ class P2PTransferService extends ChangeNotifier {
         } catch (e) {
           logWarning('Failed to clean up temp file: $e');
         }
+      }
+      // Mark task as failed to avoid stuck in "transferring" state
+      final failedTask = _activeTransfers[taskId];
+      if (failedTask != null) {
+        failedTask.status = DataTransferStatus.failed;
+        failedTask.errorMessage = 'Assemble failed: $e';
+        await _saveTaskToDb(failedTask);
+        await _safeNotificationCall(() => P2PNotificationService.instance
+            .showFileTransferCompleted(
+                task: failedTask, success: false, errorMessage: '$e'));
+        notifyListeners();
       }
     }
   }
@@ -1379,7 +1483,13 @@ class P2PTransferService extends ChangeNotifier {
           final error = data['error'] as String?;
 
           if (progress != null) {
-            task.transferredBytes = (task.fileSize * progress).round();
+            // Prefer absolute bytes if provided by isolate
+            final transferredBytes = data['transferredBytes'] as int?;
+            if (transferredBytes != null) {
+              task.transferredBytes = transferredBytes;
+            } else {
+              task.transferredBytes = (task.fileSize * progress).round();
+            }
 
             // Show progress notification - 🚀 Giảm tần suất update để tăng hiệu suất
             if (_transferSettings?.enableNotifications == true) {
@@ -1410,6 +1520,19 @@ class P2PTransferService extends ChangeNotifier {
                     ));
 
             _cleanupTransfer(task.id);
+            await _saveTaskToDb(task);
+            // Only auto-cleanup on receiver side for completed tasks
+            if (!task.isOutgoing &&
+                _transferSettings?.autoCleanupCompletedTasks == true) {
+              Timer(
+                  Duration(
+                      seconds: _transferSettings?.autoCleanupDelaySeconds ?? 5),
+                  () async {
+                logDebug(
+                    '>> Auto cleanup (completed, receiver) scheduled for task: ${task.id}');
+                await _autoCleanupTask(task.id, 'completed');
+              });
+            }
           } else if (error != null) {
             task.status = DataTransferStatus.failed;
             task.errorMessage = error;
@@ -1420,8 +1543,8 @@ class P2PTransferService extends ChangeNotifier {
                   Duration(
                       seconds: _transferSettings?.autoCleanupDelaySeconds ??
                           10), () async {
-                // logDebug(
-                //     '>> Call auto cleanup from autoCleanupFailedTasks == true for failed task: ${task.id}');
+                logDebug(
+                    '>> Call auto cleanup from autoCleanupFailedTasks == true for failed task: ${task.id}');
 
                 await _autoCleanupTask(task.id, 'failed');
               });
@@ -1437,6 +1560,19 @@ class P2PTransferService extends ChangeNotifier {
                     ));
 
             _cleanupTransfer(task.id);
+            await _saveTaskToDb(task);
+            // Only auto-cleanup on sender side for failed tasks
+            if (task.isOutgoing &&
+                _transferSettings?.autoCleanupFailedTasks == true) {
+              Timer(
+                  Duration(
+                      seconds: _transferSettings?.autoCleanupDelaySeconds ??
+                          10), () async {
+                logDebug(
+                    '>> Auto cleanup (failed, sender) scheduled for task: ${task.id}');
+                await _autoCleanupTask(task.id, 'failed');
+              });
+            }
           }
 
           notifyListeners();
@@ -1453,8 +1589,8 @@ class P2PTransferService extends ChangeNotifier {
         Timer(
             Duration(seconds: _transferSettings?.autoCleanupDelaySeconds ?? 10),
             () async {
-          // logDebug(
-          //     '>> Call auto cleanup from autoCleanupFailedTasks == true for failed task: ${task.id}');
+          logDebug(
+              '>> Call auto cleanup from autoCleanupFailedTasks == true for failed task: ${task.id}');
           await _autoCleanupTask(task.id, 'failed');
         });
       }
@@ -1468,6 +1604,7 @@ class P2PTransferService extends ChangeNotifier {
     final sendPort = params['sendPort'] as SendPort;
     Socket? tcpSocket;
     RawDatagramSocket? udpSocket;
+    RandomAccessFile? raf;
 
     try {
       // Parse parameters
@@ -1504,7 +1641,7 @@ class P2PTransferService extends ChangeNotifier {
         return;
       }
 
-      final fileBytes = await file.readAsBytes();
+      raf = await file.open();
       int totalSent = 0;
       // 🚀 Bắt đầu với chunk size lớn hơn cho tốc độ tốt hơn
       int chunkSize =
@@ -1514,14 +1651,13 @@ class P2PTransferService extends ChangeNotifier {
       Duration delay =
           const Duration(milliseconds: 2); // 🚀 Giảm delay từ 5ms xuống 2ms
 
-      final totalBytes = fileBytes.length;
+      final totalBytes = await file.length();
       bool isFirstChunk = true;
 
       while (totalSent < totalBytes) {
         final remainingBytes = totalBytes - totalSent;
         final currentChunkSize = min(chunkSize, remainingBytes);
-        final chunk =
-            fileBytes.sublist(totalSent, totalSent + currentChunkSize);
+        final chunk = await raf.read(currentChunkSize);
 
         try {
           Map<String, dynamic> dataPayload;
@@ -1642,14 +1778,12 @@ class P2PTransferService extends ChangeNotifier {
           totalSent += currentChunkSize;
           successfulChunksInRow++;
 
-          // Dynamic chunk size adjustment - 🚀 Cải thiện thuật toán adaptive
+          // Dynamic chunk size adjustment - safer bounds
           if (successfulChunksInRow > 2 && chunkSize < maxChunkSize) {
-            // Giảm từ 3 xuống 2
-            chunkSize = min(
-                (chunkSize * 1.5).round(), maxChunkSize); // Tăng 50% thay vì x2
-            delay = Duration(
-                milliseconds:
-                    max(1, delay.inMilliseconds - 1)); // Giảm delay nhẹ hơn
+            final increased = (chunkSize * 1.5).round();
+            chunkSize = increased > maxChunkSize ? maxChunkSize : increased;
+            final newDelayMs = delay.inMilliseconds - 1;
+            delay = Duration(milliseconds: newDelayMs > 0 ? newDelayMs : 0);
             successfulChunksInRow = 0;
           }
 
@@ -1690,10 +1824,19 @@ class P2PTransferService extends ChangeNotifier {
         }
       }
 
+      await raf.close();
+      raf = null;
       sendPort.send({'completed': true});
     } catch (e) {
+      // Ensure file handle is closed on error
+      try {
+        await raf?.close();
+      } catch (_) {}
       sendPort.send({'error': 'Transfer failed: $e'});
     } finally {
+      try {
+        await raf?.close();
+      } catch (_) {}
       await tcpSocket?.close();
       udpSocket?.close();
     }
@@ -2155,20 +2298,8 @@ class P2PTransferService extends ChangeNotifier {
 
   Future<void> _loadActiveTransfers() async {
     final isar = IsarService.isar;
-    final tasks = await isar.dataTransferTasks
-        .filter()
-        .not()
-        .statusEqualTo(DataTransferStatus.completed)
-        .and()
-        .not()
-        .statusEqualTo(DataTransferStatus.failed)
-        .and()
-        .not()
-        .statusEqualTo(DataTransferStatus.cancelled)
-        .and()
-        .not()
-        .statusEqualTo(DataTransferStatus.rejected)
-        .findAll();
+    // Load ALL tasks so startup behavior can decide whether to clear or keep
+    final tasks = await isar.dataTransferTasks.where().findAll();
     _activeTransfers.clear();
     for (final task in tasks) {
       _activeTransfers[task.id] = task;
@@ -2303,29 +2434,23 @@ class P2PTransferService extends ChangeNotifier {
       final task = _activeTransfers[taskId];
       if (task == null) return;
 
-      // Only auto-cleanup if task is in terminal state
-      if (task.status == DataTransferStatus.completed ||
-          task.status == DataTransferStatus.cancelled ||
-          task.status == DataTransferStatus.failed) {
-        logInfo(
-            'P2PTransferService: Auto-cleaning up task $taskId (reason: $reason)');
+      logInfo(
+          'P2PTransferService: Auto-cleaning up task $taskId (reason: $reason)');
+      // Remove from active transfers
+      _activeTransfers.remove(taskId);
 
-        // Remove from active transfers
-        _activeTransfers.remove(taskId);
+      // Remove from Isar database
+      final isar = IsarService.isar;
+      await isar.writeTxn(() async {
+        await isar.dataTransferTasks.delete(task.isarId);
+      });
 
-        // Remove from Isar database
-        final isar = IsarService.isar;
-        await isar.writeTxn(() async {
-          await isar.dataTransferTasks.delete(task.isarId);
-        });
+      // Clean up any associated resources
+      _cleanupTransfer(taskId);
 
-        // Clean up any associated resources
-        _cleanupTransfer(taskId);
+      notifyListeners();
 
-        notifyListeners();
-
-        logInfo('P2PTransferService: Successfully auto-cleaned task $taskId');
-      }
+      logInfo('P2PTransferService: Successfully auto-cleaned task $taskId');
     } catch (e) {
       logError('P2PTransferService: Failed to auto-cleanup task $taskId: $e');
     }

@@ -4,7 +4,9 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:http/http.dart' as http;
 import 'package:p2lantransfer/l10n/app_localizations.dart';
 import 'package:p2lantransfer/services/app_logger.dart';
+import 'package:p2lantransfer/utils/network_utils.dart';
 import 'package:p2lantransfer/variables.dart';
+import 'package:p2lantransfer/widgets/generic/network_required_placeholder.dart';
 
 class TermsOfUseScreen extends StatefulWidget {
   final String localeCode;
@@ -27,6 +29,7 @@ class _TermsOfUseScreenState extends State<TermsOfUseScreen> {
   String? _termsContent;
   bool _isLoading = true;
   String? _error;
+  bool _hasNetwork = true;
 
   // Keyboard shortcut focus node
   final FocusNode _keyboardFocusNode = FocusNode();
@@ -34,7 +37,16 @@ class _TermsOfUseScreenState extends State<TermsOfUseScreen> {
   @override
   void initState() {
     super.initState();
-    _loadTermsContent();
+    _checkNetworkThenLoad();
+  }
+
+  Future<void> _checkNetworkThenLoad() async {
+    final has = await NetworkUtils.isNetworkAvailable();
+    if (!mounted) return;
+    setState(() => _hasNetwork = has);
+    if (has) {
+      _loadTermsContent();
+    }
   }
 
   @override
@@ -128,6 +140,13 @@ class _TermsOfUseScreenState extends State<TermsOfUseScreen> {
   }
 
   Widget _buildBody(AppLocalizations l10n, ThemeData theme) {
+    if (!_hasNetwork) {
+      return NetworkRequiredPlaceholder(
+        title: l10n.noNetworkConnection,
+        description: l10n.internetRequiredToViewThisPage,
+      );
+    }
+
     if (_isLoading) {
       return const Center(
         child: CircularProgressIndicator(),

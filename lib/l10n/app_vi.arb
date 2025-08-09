@@ -455,7 +455,10 @@
   "tempFilesDescription": "File tạm thời từ truyền file P2Lan",
   "networkDebugCompleted": "Hoàn tất gỡ lỗi mạng. Kiểm tra log để biết chi tiết.",
   "lastRefresh": "Làm mới cuối: {time}",
-  "p2pNetworkingPaused": "Mạng P2P tạm dừng do mất kết nối internet. Sẽ tự động khôi phục khi có kết nối.",
+  "p2pNetworkingPaused": "Mạng P2P tạm dừng do mất kết nối mạng. Sẽ tự động khôi phục khi có kết nối.",
+  "internetRequiredToViewThisPage": "Cần kết nối mạng để xem trang này",
+  "noInternetPleaseConnectAndTryAgain": "Không có kết nối mạng. Vui lòng kết nối và thử lại.",
+  "noInternetToFetchNewUpdate": "Không có kết nối mạng để tải dữ liệu cập nhật. Vui lòng kết nối và thử lại.",
   "noDevicesInRange": "Không có thiết bị trong tầm. Thử làm mới.",
   "initialDiscoveryInProgress": "Đang tiến hành khám phá ban đầu...",
   "refreshing": "Đang làm mới...",
@@ -809,6 +812,14 @@
   "failedTransfers": "Tác vụ thất bại",
   "removeProgressOnFail": "Xóa tiến trình khi chuyển thất bại",
   "cleanupDelay": "Thời gian trì hoãn dọn dẹp",
+  "autoCheckUpdatesDaily": "Tự động kiểm tra cập nhật",
+  "@autoCheckUpdatesDaily": {"description": "Bật kiểm tra cập nhật ứng dụng mỗi ngày một lần"},
+  "autoCheckUpdatesDailyDesc": "Kiểm tra cập nhật mỗi ngày và thông báo khi có phiên bản mới",
+  "@autoCheckUpdatesDailyDesc": {"description": "Mô tả cho tính năng kiểm tra cập nhật hằng ngày"},
+  "clearTransfersAtStartup": "Xóa tiến trình truyền khi khởi động",
+  "@clearTransfersAtStartup": {"description": "Nhãn cài đặt xóa các tiến trình truyền cũ khi ứng dụng khởi động"},
+  "clearTransfersAtStartupDesc": "Tự động xóa các tiến trình truyền cũ khi ứng dụng khởi động",
+  "@clearTransfersAtStartupDesc": {"description": "Mô tả cài đặt xóa tiến trình truyền khi khởi động"},
   
   "notificationRequestPermission": "Yêu cầu quyền thông báo",
   "notificationRequestPermissionDesc": "Ứng dụng cần được cấp quyền thông báo để có thể thông báo cho bạn. Nếu đã nhấn nút 'Cấp quyền' mà vẫn không hộp thoại cấp quyền xảy ra, phiền bạn cấp quyền thông báo một cách thủ công trong phần cài đặt quyền của ứng dụng.",
@@ -885,5 +896,50 @@
     }
   },
   "currentPlatform": "Nền tảng hiện tại",
-  "eerror": "Lỗi"
+  "eerror": "Lỗi",
+  "stopped": "Đã dừng",
+  "completedInTime": "Hoàn thành trong {duration}",
+  "@completedInTime": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "transferredInTime": "Đã chuyển {duration}",
+  "@transferredInTime": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingInTime": "Đang chờ {duration}",
+  "@waitingInTime": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "transferStatusViewAll": "Xem: Tất cả",
+  "transferStatusViewOutgoing": "Xem: Chỉ gửi đi",
+  "transferStatusViewIncoming": "Xem: Chỉ nhận về",
+
+  "authorProducts": "Sản phẩm khác",
+  "authorProductsDesc": "Xem các sản phẩm khác của tác giả, có thể bạn sẽ quan tâm!",
+  "authorProductsMessage": "Chào bạn! Đây là một số sản phẩm khác của tôi. Nếu bạn quan tâm, đừng ngần ngại xem qua nhé! Tôi hy vọng bạn sẽ tìm thấy điều gì đó hữu ích trong số này. Cảm ơn bạn đã ghé thăm!",
+  "noOtherProducts": "Không có sản phẩm nào khác",
+  "loadingProducts": "Đang tải sản phẩm...",
+  "failedToLoadProducts": "Không thể tải sản phẩm",
+  "retryLoadProducts": "Thử tải lại sản phẩm",
+  "visitProduct": "Xem sản phẩm",
+  "productCount": "{count} sản phẩm",
+  "@productCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }
